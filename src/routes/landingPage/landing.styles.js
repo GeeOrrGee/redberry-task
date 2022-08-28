@@ -16,11 +16,6 @@ export const RouteButton = styled.button`
     &:active {
         background-color: var(--dark-blue);
     }
-
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
 `;
 
 export const ButtonsContainer = styled.div`
@@ -30,6 +25,10 @@ export const ButtonsContainer = styled.div`
     max-width: 35rem;
     width: 85vw;
     margin-bottom: 2rem;
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
 `;
 
 // export const ImageContainer = styled.div`

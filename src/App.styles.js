@@ -6,4 +6,6 @@ export const MainContainer = styled.main`
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: ${({ grey }) =>
+        grey ? 'var(--grey-background)' : '#FFF'};
 `;

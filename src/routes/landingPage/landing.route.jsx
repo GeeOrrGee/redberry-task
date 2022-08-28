@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 export const Landing = () => {
     const [mobileImageState, setMobileImageState] = useState(false);
-
+    console.log('LOOP?');
     const conditionalImageRender = () => {
         const currWidth = window.innerWidth;
         setMobileImageState(currWidth < 500);
@@ -43,12 +43,13 @@ export const Landing = () => {
 
             {/* </ImageContainer> */}
             <ButtonsContainer>
-                <RouteButton>
-                    <Link to={'/add-laptop'}>ჩანაწერის დამატება</Link>
-                </RouteButton>
-                <RouteButton>
-                    <Link to={'/laptops'}>ჩანაწერების სია</Link>
-                </RouteButton>
+                <Link to={'/add-laptop'}>
+                    <RouteButton>ჩანაწერის დამატება</RouteButton>
+                </Link>
+
+                <Link to={'/laptops'}>
+                    <RouteButton>ჩანაწერების სია</RouteButton>
+                </Link>
             </ButtonsContainer>
         </LandingPageContainer>
     );
