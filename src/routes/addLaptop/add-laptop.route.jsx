@@ -2,6 +2,7 @@ import { Route, Routes, NavLink, useNavigate } from 'react-router-dom';
 import { CoworkerInfo } from './coworker-info/coworker-info.route';
 import { AddLaptopContainer, NavlinksContainer } from './add-laptop.styles';
 import { useEffect } from 'react';
+import { BlueButton } from '../../shared/blueButton/blue-button.styles';
 const activeNavlinkStyles = {
     // borderBottom: '3px solid #232323',
     '&::before': {
@@ -12,14 +13,16 @@ const activeNavlinkStyles = {
 export const AddLaptop = () => {
     const navigate = useNavigate();
     useEffect(() => {
+        const currUrl = window.location.pathname;
+        const conditionalRedirection =
+            currUrl.substring(currUrl.lastIndexOf('/' + 1)) === '/add-laptop';
         const savedProgress = JSON.parse(
             localStorage.getItem('add-laptop-route')
         );
 
-        console.log('LOOP');
         if (savedProgress) {
             navigate(savedProgress);
-        } else {
+        } else if (conditionalRedirection) {
             navigate('/add-laptop/coworker-info');
         }
     }, []);
@@ -47,6 +50,9 @@ export const AddLaptop = () => {
                 <Route path='/coworker-info' element={<CoworkerInfo />} />
                 <Route path='/laptop-specs' element={<CoworkerInfo />} />
             </Routes>
+            <div>
+                <img src={require('../../assets/addLaptop/LOGO-10 2.png')} />
+            </div>
         </AddLaptopContainer>
     );
 };

@@ -18,8 +18,10 @@ export const GlobalStyle = styled.createGlobalStyle`
         --light-blue: #62a1eb;
         --moderate-blue: #317ad0;
         --dark-blue: #1a5dab;
-        --grey-background: #f7f7f7;
+        --greysh-background: #f7f7f7;
+        --grey-background: #ebebeb;
         --light-blue-outline: #8ac0e2;
+        --grey-font-color: #2e2e2e;
     }
 `;
 

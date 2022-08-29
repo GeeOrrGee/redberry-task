@@ -2,9 +2,8 @@ import {
     ButtonsContainer,
     ImageContainer,
     LandingPageContainer,
-    RouteButton,
 } from './landing.styles';
-
+import { BlueButton } from '../../shared/blueButton/blue-button.styles';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -44,11 +43,11 @@ export const Landing = () => {
             {/* </ImageContainer> */}
             <ButtonsContainer>
                 <Link to={'/add-laptop'}>
-                    <RouteButton>ჩანაწერის დამატება</RouteButton>
+                    <BlueButton>ჩანაწერის დამატება</BlueButton>
                 </Link>
 
                 <Link to={'/laptops'}>
-                    <RouteButton>ჩანაწერების სია</RouteButton>
+                    <BlueButton>ჩანაწერების სია</BlueButton>
                 </Link>
             </ButtonsContainer>
         </LandingPageContainer>

@@ -10,7 +10,7 @@ import axios from 'axios';
 function App() {
     const conditionalBackground =
         window.location.pathname.includes('add-laptop');
-    console.log(conditionalBackground);
+
     return (
         <MainContainer grey={conditionalBackground}>
             <Routes>

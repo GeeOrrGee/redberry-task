@@ -20,7 +20,7 @@ export const NavlinksContainer = styled.header`
 
         &.active-inner-navlink::before {
             width: 72%;
-            top: 110%;
+            top: 150%;
             left: 14%;
             content: '';
             background-color: #232323;
@@ -50,10 +50,12 @@ export const AddLaptopContainer = styled.section`
     display: flex;
     flex-direction: column;
     padding-block: clamp(2rem, 5vw, 10rem);
-    height: 100vh;
+    height: 100%;
+    /* height: 100vh; */
     justify-content: space-between;
     align-items: center;
     gap: clamp(1rem, 2vw, 4rem);
+
     &::before {
         position: fixed;
         top: 5%;
