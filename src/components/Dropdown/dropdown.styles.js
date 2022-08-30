@@ -40,4 +40,12 @@ export const DropdownField = styled.div`
         width: 1.5rem;
         height: 1.5rem;
     }
+
+    ${({ errorState }) =>
+        errorState &&
+        `
+       
+       border:2px solid var(--error-red);
+      
+    `}
 `;

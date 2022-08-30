@@ -34,7 +34,7 @@ export const LandingPageContainer = styled.section`
     width: 100%;
     height: 100%;
     display: flex;
-    /* gap: clamp(5rem, 4.5vw, 10rem); */
+    gap: clamp(5rem, 4.5vw, 10rem);
     flex-direction: column;
     align-items: center;
     justify-content: space-between;

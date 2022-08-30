@@ -22,6 +22,7 @@ export const GlobalStyle = styled.createGlobalStyle`
         --grey-background: #ebebeb;
         --light-blue-outline: #8ac0e2;
         --grey-font-color: #2e2e2e;
+        --error-red: #e52f2f;
     }
 `;
 

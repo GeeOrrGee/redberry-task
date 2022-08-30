@@ -3,6 +3,7 @@ import { CoworkerInfo } from './coworker-info/coworker-info.route';
 import { AddLaptopContainer, NavlinksContainer } from './add-laptop.styles';
 import { useEffect } from 'react';
 import { BlueButton } from '../../shared/blueButton/blue-button.styles';
+import userEvent from '@testing-library/user-event';
 const activeNavlinkStyles = {
     // borderBottom: '3px solid #232323',
     '&::before': {
@@ -12,6 +13,7 @@ const activeNavlinkStyles = {
 
 export const AddLaptop = () => {
     const navigate = useNavigate();
+
     useEffect(() => {
         const currUrl = window.location.pathname;
         const conditionalRedirection =

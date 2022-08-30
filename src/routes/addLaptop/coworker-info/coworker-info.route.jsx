@@ -1,21 +1,14 @@
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { ReactComponent as Vector } from '../../../assets/addLaptop/Vector.svg';
-import { NavLink, useNavigate } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom';
 import {
-    CoworkerInfoContainer,
-    DropdownField,
     FormContainer,
-    InputField,
-    InputLabelWrapper,
-    Label,
     MultipleInputContainer,
-    NavlinksContainer,
-    OptionsContainer,
     RouteButtonsContainer,
 } from './coworker-info.styles';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { Dropdown } from '../../../components/Dropdown/dropdown.component';
+import { FormInput } from '../../../components/InputField/input-field.component';
 
 export const CoworkerInfo = () => {
     const defaultState = {
@@ -29,7 +22,7 @@ export const CoworkerInfo = () => {
 
     const navigate = useNavigate();
     const [userObject, setUserObject] = useState(defaultState);
-
+    const [formErrors, setFormErrors] = useState([]);
     const [activeTeamId, setActiveTeamId] = useState(0);
 
     const handleNextRoute = () => {
@@ -59,52 +52,96 @@ export const CoworkerInfo = () => {
 
     // };
 
+    const formValidation = () => {
+        const fields = Object.keys(userObject);
+        // const emptyFields = fields.filter((key) => !userObject[key]);
+
+        const errorArray = fields.filter((field) => {
+            const value = userObject[field];
+            if (!value) return !value;
+
+            if (field === 'name' || field === 'surname') {
+                const validLength = value.length >= 2;
+                const isGeorgian = value.match(/^[ა-ჰ]+$/);
+
+                const validity = isGeorgian && validLength;
+                return !validity;
+            }
+
+            if (field === 'email') {
+                const lastPart = value.substring(value.length - 13);
+                const validEmail =
+                    lastPart === '@redberry.com' &&
+                    value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/); //prevents multiple @ symbols
+
+                return !validEmail;
+            }
+
+            if (field === 'number') {
+                const notNumber = isNaN(parseInt(value.substring(1)));
+                const georgianNumber = value.slice(0, 5) === '+9955';
+                const validLength = value.substring(4).length === 9;
+                const validInput = georgianNumber && validLength && !notNumber;
+                return !validInput;
+            }
+        });
+
+        return errorArray;
+    };
+
+    // console.log(Object.keys(userObject).filter((key) => !userObject[key]));
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+        const invalidFieldsArray = formValidation();
+        if (invalidFieldsArray.length) {
+            setFormErrors(invalidFieldsArray);
+            console.log(formErrors);
+            return;
+        }
+        handleNextRoute();
+
+        //post request
+    };
+
     const handleInputChange = (e) => {
         const inputType = e.target.name;
         const value = e.target.value;
-
-        //validations
-        if (inputType === 'email') {
-            let regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@redberry.com/;
-            console.log(
-                ',,sss,,s@redberry,com'.match(
-                    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@redberry.com/
-                ) //TODO validate this in handleNextRoute(), finish the forms TODAY
-            );
-            return regex.test(value)
-                ? setUserObject({ ...userObject, [inputType]: value })
-                : Error;
-        } else if (inputType === 'number') {
+        const invalidFieldsArray = formValidation();
+        if (invalidFieldsArray.length) {
+            setFormErrors(invalidFieldsArray);
+            console.log(formErrors);
+            return;
         }
 
+        //validations
         setUserObject({ ...userObject, [inputType]: value });
+        console.log(formErrors);
     };
 
     return (
-        <FormContainer>
+        <FormContainer onSubmit={onSubmitHandler}>
             <MultipleInputContainer>
-                <InputLabelWrapper
+                <FormInput
                     content={'მინიმუმ 2 სიმბოლო, ქართული ასოები'}
-                >
-                    <Label>სახელი</Label>
-                    <InputField
-                        value={userObject.name}
-                        name='name'
-                        onChange={handleInputChange}
-                        placeholder='გრიშა'
-                    />
-                </InputLabelWrapper>
-                <InputLabelWrapper
+                    value={userObject.name}
+                    label='სახელი'
+                    name={'name'}
+                    placeholder='გრიშა'
+                    onChange={handleInputChange}
+                    type='text'
+                    errorState={formErrors.includes('name')}
+                    required
+                />
+                <FormInput
+                    label='გვარი'
                     content={'მინიმუმ 2 სიმბოლო, ქართული ასოები'}
-                >
-                    <Label>გვარი</Label>
-                    <InputField
-                        name='surname'
-                        onChange={handleInputChange}
-                        value={userObject.surname}
-                        placeholder='ბაგრატიონი'
-                    />
-                </InputLabelWrapper>
+                    name={'surname'}
+                    onChange={handleInputChange}
+                    value={userObject.surname}
+                    errorState={formErrors.includes('surname')}
+                    placeholder='ბაგრატიონი'
+                    required
+                />
             </MultipleInputContainer>
             <Dropdown
                 name={'თიმი'}
@@ -112,6 +149,7 @@ export const CoworkerInfo = () => {
                 setActiveTeamId={setActiveTeamId}
                 dataUrl='https://pcfy.redberryinternship.ge/api/teams'
                 callbackHandler={handleDropdownSelect}
+                errorState={formErrors.includes('team_id')}
             />
             <Dropdown
                 name={'პოზიციები'}
@@ -119,34 +157,36 @@ export const CoworkerInfo = () => {
                 activeTeamId={activeTeamId}
                 setActiveTeamId={setActiveTeamId}
                 callbackHandler={handleDropdownSelect}
+                errorState={formErrors.includes('position_id')}
             />
 
-            <InputLabelWrapper content={'უნდა მთავრდებოდეს @redberry.ge-ით'}>
-                <Label>მეილი</Label>
-                <InputField
-                    value={userObject.email}
-                    name='email'
-                    onChange={handleInputChange}
-                    placeholder='ბაგრატიონი'
-                    content={'უნდა მთავრდებოდეს @redberry.ge-ით'}
-                />
-            </InputLabelWrapper>
-            <InputLabelWrapper
+            <FormInput
+                name={'email'}
+                content={'უნდა მთავრდებოდეს @redberry.ge-ით'}
+                value={userObject.email}
+                label='მეილი'
+                onChange={handleInputChange}
+                errorState={formErrors.includes('email')}
+                placeholder='ბაგრატიონი'
+                type='email'
+                required
+            />
+
+            <FormInput
+                name={'number'}
                 content={'უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს'}
-            >
-                <Label>ტელეფონის ნომერი</Label>
-                <InputField
-                    name='number'
-                    onChange={handleInputChange}
-                    value={userObject.number}
-                    placeholder='ბაგრატიონი'
-                    content={'უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს'}
-                />
-            </InputLabelWrapper>
+                label='ტელეფონის ნომერი'
+                onChange={handleInputChange}
+                errorState={formErrors.includes('number')}
+                value={`${userObject.number}`}
+                placeholder='ბაგრატიონი'
+                type='text'
+                required
+            />
 
             <RouteButtonsContainer>
                 <div>
-                    <BlueButton onClick={handleNextRoute}>შემდეგი</BlueButton>
+                    <BlueButton type='submit'>შემდეგი</BlueButton>
                 </div>
             </RouteButtonsContainer>
         </FormContainer>

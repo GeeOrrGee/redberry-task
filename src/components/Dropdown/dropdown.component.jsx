@@ -31,48 +31,10 @@ export const Dropdown = ({
             ? setActiveDropdown('')
             : setActiveDropdown(name);
 
-    useEffect(() => {
-        if (activeDropdown && !fetchedData.length) {
-            axios(dataUrl).then(({ data: { data } }) => {
-                setFetchedData(data);
-                setCurrData(data);
-            });
-        }
-        if (activeTeamId) {
-            if (!fetchedData.length)
-                axios(dataUrl).then(({ data: { data } }) => {
-                    setFetchedData(data);
-                    setCurrData(data);
-                });
-            const filteredPositions = fetchedData.filter((obj) =>
-                obj.team_id ? obj.team_id === activeTeamId : obj
-            );
-            setCurrData(filteredPositions);
-            // const selectedOption = currData.filter((obj) =>
-            //     !obj.team_id
-            //         ? filteredPositions[0].name === activeTeamId
-            //         : obj.team_id === activeTeamId
-            // );
-            // if (selectedOption.length === 1)
-            // setActiveTitle(selectedOption[0].name);
-        }
-    }, [dataUrl, activeDropdown, fetchedData, activeTeamId, currData]);
+    useEffect(() => {}, []);
 
     const onSelectHandler = (e) => {
-        const targetId = parseInt(e.target.dataset.id);
-        if (e.target.dataset.teamid) {
-            //for user positions
-            const selectedOption = currData.filter(
-                (obj) => obj.id === targetId
-            );
-            if (selectedOption.length === 1)
-                setActiveTitle(selectedOption[0].name);
-            const teamId = parseInt(e.target.dataset.teamid);
-            callbackHandler(teamId, targetId);
-            return;
-        }
-
-        callbackHandler(targetId);
+        callbackHandler();
     };
     return (
         <DropdownField
