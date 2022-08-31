@@ -14,12 +14,16 @@ export const OptionsContainer = styled.div`
     display: flex;
     flex-direction: column;
     background-color: white;
+
     border-radius: 5px;
+
     box-shadow: 0 0.4rem 10rem 0.4rem rgb(0, 0, 0, 0.1);
     z-index: 1;
     top: 102%;
     left: 0%;
     width: 100%;
+
+    /* height: 40vh; */
     max-height: 50rem;
     overflow: hidden;
     overflow-y: scroll;

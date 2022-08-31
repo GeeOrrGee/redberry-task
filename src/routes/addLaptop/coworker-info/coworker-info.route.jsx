@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,9 +9,10 @@ import {
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
+import axios from 'axios';
 
 export const CoworkerInfo = () => {
-    const defaultState = {
+    const defaultForm = {
         name: '',
         surname: '',
         team_id: 0,
@@ -20,10 +21,33 @@ export const CoworkerInfo = () => {
         number: '',
     };
 
+    const defaultData = {
+        teams: [],
+        positions: [],
+    };
+
+    const defaultNames = {
+        positions: 'პოზიციები',
+        teams: 'თიმი',
+    };
     const navigate = useNavigate();
-    const [userObject, setUserObject] = useState(defaultState);
+    const [userObject, setUserObject] = useState(defaultForm);
     const [formErrors, setFormErrors] = useState([]);
     const [activeTeamId, setActiveTeamId] = useState(0);
+    const [fetchedData, setFetchedData] = useState(defaultData);
+    const [teamsCurrData, setTeamsCurrData] = useState([]);
+    const [positionsCurrData, setPositionsCurrData] = useState([]);
+    const [activeNames, setActiveNames] = useState(defaultNames);
+
+    useEffect(() => {
+        if (activeTeamId) {
+            const filteredPositions = fetchedData.positions.filter(
+                (obj) => obj.team_id === activeTeamId
+            );
+            setPositionsCurrData(filteredPositions);
+        }
+        // console.log(positionsCurrData);
+    }, [activeTeamId, fetchedData]);
 
     const handleNextRoute = () => {
         navigate('/add-laptop/laptop-specs');
@@ -33,31 +57,91 @@ export const CoworkerInfo = () => {
         navigate(-1);
     };
 
-    const handleDropdownSelect = (team_id = 0, position_id = 0) => {
-        setUserObject({ ...userObject, team_id, position_id });
-        setActiveTeamId(team_id);
+    const handleTeamsDropdown = async () => {
+        if (!fetchedData.teams.length) {
+            const {
+                data: { data },
+            } = await axios('https://pcfy.redberryinternship.ge/api/teams');
+            setFetchedData({ ...fetchedData, teams: data });
+            setTeamsCurrData(data);
+        }
     };
 
-    // const handleTeamsDropdown =  () => {v
+    const handlePositionsDropdown = async () => {
+        if (!fetchedData.positions.length) {
+            const {
+                data: { data },
+            } = await axios('https://pcfy.redberryinternship.ge/api/positions');
+            setFetchedData({ ...fetchedData, positions: data });
+            if (activeTeamId) {
+                console.log('ss');
+                const filteredPositions = data.filter(
+                    (position) =>
+                        activeTeamId && position.team_id === activeTeamId
+                );
+                setPositionsCurrData(filteredPositions);
+                return;
+            } else {
+                console.log('ss');
+                setPositionsCurrData(data);
+            }
+        }
+    };
 
-    // };
+    const handleDropdownSelect = (dataObj) => {
+        if (formErrors.includes('team_id')) {
+            setFormErrors(formErrors.filter((err) => err !== 'team_id'));
+        }
+        if (dataObj?.team_id) {
+            const { team_id, id, name } = dataObj;
+            if (formErrors.includes('position_id')) {
+                setFormErrors(
+                    formErrors.filter(
+                        (err) => err !== 'position_id' && err !== 'team_id'
+                    )
+                );
+            }
+            setUserObject({ ...userObject, team_id, position_id: id });
+            setActiveTeamId(team_id);
+            if (!teamsCurrData.length) {
+                axios('https://pcfy.redberryinternship.ge/api/teams').then(
+                    ({ data: { data } }) => {
+                        const [autoSelectTeam] = data.filter(
+                            (obj) => obj.id === team_id
+                        );
+                        setActiveNames({
+                            teams: autoSelectTeam.name,
+                            positions: name,
+                        });
+                    }
+                );
+            } else {
+                const [autoSelectTeam] = teamsCurrData.filter(
+                    (obj) => obj.id === team_id
+                );
+                console.log(name);
+                setActiveNames({
+                    teams: autoSelectTeam?.name,
+                    positions: name,
+                });
+            }
 
-    // const handlePositionsDropdown = async () => {
-    //     const {
-    //         data: { data },
-    //     } = await axios('https://pcfy.redberryinternship.ge/api/positions');
-    //     const filteredPositions = data.filter((position) =>
-    //         activeTeamId === null ? position : position.team_id === activeTeamId
-    //     );
+            return;
+        } else if (!dataObj?.team_id) {
+            const { id, name } = dataObj;
+            setUserObject({ ...userObject, team_id: id, position_id: 0 });
+            setActiveTeamId(id);
+            setActiveNames({ positions: 'პოზიციები', teams: name });
 
-    // };
-
+            return;
+        }
+    };
     const formValidation = () => {
         const fields = Object.keys(userObject);
-        // const emptyFields = fields.filter((key) => !userObject[key]);
 
         const errorArray = fields.filter((field) => {
             const value = userObject[field];
+            console.log(field, !value);
             if (!value) return !value;
 
             if (field === 'name' || field === 'surname') {
@@ -69,9 +153,9 @@ export const CoworkerInfo = () => {
             }
 
             if (field === 'email') {
-                const lastPart = value.substring(value.length - 13);
+                const lastPart = value.substring(value.length - 12);
                 const validEmail =
-                    lastPart === '@redberry.com' &&
+                    lastPart === '@redberry.ge' &&
                     value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/); //prevents multiple @ symbols
 
                 return !validEmail;
@@ -82,22 +166,25 @@ export const CoworkerInfo = () => {
                 const georgianNumber = value.slice(0, 5) === '+9955';
                 const validLength = value.substring(4).length === 9;
                 const validInput = georgianNumber && validLength && !notNumber;
+                console.log(validInput);
                 return !validInput;
             }
+
+            return !userObject[field];
         });
 
         return errorArray;
     };
 
-    // console.log(Object.keys(userObject).filter((key) => !userObject[key]));
     const onSubmitHandler = (e) => {
         e.preventDefault();
         const invalidFieldsArray = formValidation();
+        console.log(invalidFieldsArray);
         if (invalidFieldsArray.length) {
             setFormErrors(invalidFieldsArray);
-            console.log(formErrors);
             return;
         }
+        console.log(userObject);
         handleNextRoute();
 
         //post request
@@ -106,16 +193,10 @@ export const CoworkerInfo = () => {
     const handleInputChange = (e) => {
         const inputType = e.target.name;
         const value = e.target.value;
-        const invalidFieldsArray = formValidation();
-        if (invalidFieldsArray.length) {
-            setFormErrors(invalidFieldsArray);
-            console.log(formErrors);
-            return;
-        }
-
-        //validations
         setUserObject({ ...userObject, [inputType]: value });
-        console.log(formErrors);
+        if (formErrors.includes(inputType)) {
+            setFormErrors(formErrors.filter((err) => err !== inputType));
+        }
     };
 
     return (
@@ -144,20 +225,18 @@ export const CoworkerInfo = () => {
                 />
             </MultipleInputContainer>
             <Dropdown
-                name={'თიმი'}
-                activeTeamId={activeTeamId}
-                setActiveTeamId={setActiveTeamId}
-                dataUrl='https://pcfy.redberryinternship.ge/api/teams'
-                callbackHandler={handleDropdownSelect}
+                name={activeNames.teams}
+                callbackHandler={handleTeamsDropdown}
                 errorState={formErrors.includes('team_id')}
+                data={teamsCurrData}
+                onSelectHandler={handleDropdownSelect}
             />
             <Dropdown
-                name={'პოზიციები'}
-                dataUrl='https://pcfy.redberryinternship.ge/api/positions'
-                activeTeamId={activeTeamId}
-                setActiveTeamId={setActiveTeamId}
-                callbackHandler={handleDropdownSelect}
+                name={activeNames.positions}
+                callbackHandler={handlePositionsDropdown}
                 errorState={formErrors.includes('position_id')}
+                data={positionsCurrData}
+                onSelectHandler={handleDropdownSelect}
             />
 
             <FormInput

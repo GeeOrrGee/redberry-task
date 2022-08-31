@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { InputLabelWrapper, Label, InputField } from './input-field.styles';
 
 export const FormInput = ({ content, label, errorState, ...otherProps }) => {
