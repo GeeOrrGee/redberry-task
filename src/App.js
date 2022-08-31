@@ -4,8 +4,7 @@ import { Landing } from './routes/landingPage/landing.route';
 import { MainContainer } from './App.styles.js';
 import { AddLaptop } from './routes/addLaptop/add-laptop.route.jsx';
 import axios from 'axios';
-
-//TODO: 1- add form layout (filter positions based on the teams); 2-add form validations; 3(optional)- send POST request and persist and clear all the data
+import { useEffect } from 'react';
 
 function App() {
     const conditionalBackground =

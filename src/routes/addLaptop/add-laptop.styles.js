@@ -1,5 +1,29 @@
 import styled from 'styled-components';
 
+export const VectorContainer = styled.div`
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 5rem;
+    height: 5rem;
+    background-color: #d9d9d9;
+    border-radius: 50rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    svg {
+        padding-top: 0.3rem;
+        height: 40%;
+        width: 40%;
+        transform: rotate(90deg);
+    }
+    &:hover {
+        transform: scale(115%);
+    }
+    transition: all 0.2s;
+`;
+
 export const NavlinksContainer = styled.header`
     display: flex;
     width: 50%;
@@ -10,7 +34,7 @@ export const NavlinksContainer = styled.header`
         text-decoration: none;
         color: #232323;
         font-size: clamp(1.2rem, 1.2vw, 2rem);
-
+        font-weight: 700;
         cursor: pointer;
         display: inline-block;
         border-bottom: 3px solid transparent;
@@ -42,6 +66,21 @@ export const NavlinksContainer = styled.header`
             }
         }
     }
+    & ~ p {
+        margin-bottom: 1.5rem;
+    }
+    @media (max-width: 50em) {
+        padding-top: 2rem;
+        a {
+            display: none;
+            &.active-inner-navlink {
+                display: inline-block;
+                &::before {
+                    display: none;
+                }
+            }
+        }
+    }
 `;
 
 export const AddLaptopContainer = styled.section`
@@ -51,15 +90,10 @@ export const AddLaptopContainer = styled.section`
     flex-direction: column;
     padding-block: clamp(2rem, 5vw, 10rem);
     height: 100%;
-    /* height: 100vh; */
     justify-content: space-between;
     align-items: center;
-    gap: clamp(1rem, 2vw, 4rem);
-
-    &::before {
-        position: fixed;
-        top: 5%;
-        left: 5%;
-        content: '';
+    gap: clamp(0.8rem, 1.5vw, 4rem);
+    @media (max-width: 50em) {
+        padding: 0;
     }
 `;

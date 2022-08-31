@@ -3,14 +3,20 @@ import { createGlobalStyle } from 'styled-components';
 const styled = { createGlobalStyle };
 
 export const GlobalStyle = styled.createGlobalStyle`
+    @font-face {
+        font-family: 'helvetica-neue';
+        src: url(font/HelveticaNeue.ttc);
+        font-style: normal;
+        font-weight: 100;
+    }
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Helvetica Neue', sans-serif;
     }
 
     html {
+        font-family: 'helvetica-neue', sans-serif;
         font-size: 10px;
     }
 

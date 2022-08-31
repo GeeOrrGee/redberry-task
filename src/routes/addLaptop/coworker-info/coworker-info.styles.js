@@ -62,20 +62,24 @@ export const MultipleInputContainer = styled.div`
     gap: clamp(4rem, 4vw, 10rem);
     width: 100%;
     justify-content: space-around;
+    @media (max-width: 50em) {
+        flex-direction: column;
+    }
 `;
 
 export const FormContainer = styled.form`
     width: 100%;
-    /* height: 40%; */
-    /* padding: 5rem 10rem; */
     background-color: #fff;
     padding-block: clamp(2rem, 3.5vw, 7rem);
     padding-inline: clamp(2rem, 5vw, 14rem);
     border-radius: 15px;
-    gap: clamp(3rem, 3vw, 8rem);
+    /* gap: clamp(3rem, 3vw, 8rem); */
     background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     /* max-height: 90rem; */
+    @media (max-width: 50em) {
+        min-height: 85vh;
+    }
 `;

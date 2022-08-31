@@ -10,6 +10,9 @@ export const ButtonsContainer = styled.div`
     a {
         text-decoration: none;
         color: inherit;
+        button {
+            text-transform: uppercase;
+        }
     }
 `;
 
@@ -30,21 +33,22 @@ export const ButtonsContainer = styled.div`
 // `;
 
 export const LandingPageContainer = styled.section`
-    max-width: 90rem;
-    width: 100%;
-    height: 100%;
+    /* max-width: 90rem; */
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    gap: clamp(5rem, 4.5vw, 10rem);
+    /* gap: clamp(1rem, 4.5vw, 10rem); */
     flex-direction: column;
     align-items: center;
+    background-color: white;
     justify-content: space-between;
-    padding-block: clamp(3rem, 4vw, 6rem);
+    padding-block: clamp(3rem, 4vw, 10rem);
     img:first-child {
-        width: clamp(8rem, 8vw, 16rem);
+        width: clamp(9rem, 8vw, 16rem);
+        padding-top: 3rem;
     }
     img {
-        width: 85%;
+        width: 75%;
         max-width: 78rem;
     }
-    /* gap: clamp(6rem, 6vw, 12rem); */
 `;

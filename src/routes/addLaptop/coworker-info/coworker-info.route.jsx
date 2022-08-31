@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-
+import { useReducer, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FormContainer,
@@ -10,43 +9,56 @@ import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
 import axios from 'axios';
-
+import coworkerTypes from './coworker-info-actionTypes';
+import createAction from '../../../utils/action-creator';
+import coworkerReducer from './coworker-info.reducer';
+import { defaultState } from './coworker-info.reducer';
 export const CoworkerInfo = () => {
-    const defaultForm = {
-        name: '',
-        surname: '',
-        team_id: 0,
-        position_id: 0,
-        email: '',
-        number: '',
-    };
-
-    const defaultData = {
-        teams: [],
-        positions: [],
-    };
-
-    const defaultNames = {
-        positions: 'პოზიციები',
-        teams: 'თიმი',
-    };
     const navigate = useNavigate();
-    const [userObject, setUserObject] = useState(defaultForm);
-    const [formErrors, setFormErrors] = useState([]);
-    const [activeTeamId, setActiveTeamId] = useState(0);
-    const [fetchedData, setFetchedData] = useState(defaultData);
-    const [teamsCurrData, setTeamsCurrData] = useState([]);
-    const [positionsCurrData, setPositionsCurrData] = useState([]);
-    const [activeNames, setActiveNames] = useState(defaultNames);
+    const [state, dispatch] = useReducer(coworkerReducer, defaultState);
+    const didMountRef = useRef(false);
+    useEffect(() => {
+        const persistedState = JSON.parse(
+            localStorage.getItem('coworker-state')
+        );
+        if (persistedState) {
+            console.log(persistedState);
+            dispatch(
+                createAction(coworkerTypes.REHYDRATE_STATE, persistedState)
+            );
+        }
+    }, []);
+
+    useEffect(() => {
+        if (didMountRef.current) {
+            localStorage.setItem('coworker-state', JSON.stringify(state));
+        }
+        didMountRef.current = true;
+    }, [state]);
+
+    const {
+        userObject,
+        formErrors,
+        activeNames,
+        activeTeamId,
+        fetchedData,
+        teamsCurrData,
+        positionsCurrData,
+    } = state;
 
     useEffect(() => {
         if (activeTeamId) {
             const filteredPositions = fetchedData.positions.filter(
                 (obj) => obj.team_id === activeTeamId
             );
-            setPositionsCurrData(filteredPositions);
+
+            dispatch(
+                createAction(
+                    coworkerTypes.SET_CURR_POSITIONS_DATA,
+                    filteredPositions
+                )
+            );
         }
-        // console.log(positionsCurrData);
     }, [activeTeamId, fetchedData]);
 
     const handleNextRoute = () => {
@@ -62,8 +74,13 @@ export const CoworkerInfo = () => {
             const {
                 data: { data },
             } = await axios('https://pcfy.redberryinternship.ge/api/teams');
-            setFetchedData({ ...fetchedData, teams: data });
-            setTeamsCurrData(data);
+            dispatch(
+                createAction(coworkerTypes.SET_FETCHED_DATA, {
+                    ...fetchedData,
+                    teams: data,
+                })
+            );
+            dispatch(createAction(coworkerTypes.SET_CURR_TEAMS_DATA, data));
         }
     };
 
@@ -72,47 +89,75 @@ export const CoworkerInfo = () => {
             const {
                 data: { data },
             } = await axios('https://pcfy.redberryinternship.ge/api/positions');
-            setFetchedData({ ...fetchedData, positions: data });
+            dispatch(
+                createAction(coworkerTypes.SET_FETCHED_DATA, {
+                    ...fetchedData,
+                    positions: data,
+                })
+            );
             if (activeTeamId) {
                 console.log('ss');
                 const filteredPositions = data.filter(
                     (position) =>
                         activeTeamId && position.team_id === activeTeamId
                 );
-                setPositionsCurrData(filteredPositions);
+                dispatch(
+                    createAction(
+                        coworkerTypes.SET_CURR_POSITIONS_DATA,
+                        filteredPositions
+                    )
+                );
                 return;
             } else {
-                console.log('ss');
-                setPositionsCurrData(data);
+                dispatch(
+                    createAction(coworkerTypes.SET_CURR_POSITIONS_DATA, data)
+                );
             }
         }
     };
 
     const handleDropdownSelect = (dataObj) => {
         if (formErrors.includes('team_id')) {
-            setFormErrors(formErrors.filter((err) => err !== 'team_id'));
+            dispatch(
+                createAction(
+                    coworkerTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== 'team_id')
+                )
+            );
         }
         if (dataObj?.team_id) {
             const { team_id, id, name } = dataObj;
             if (formErrors.includes('position_id')) {
-                setFormErrors(
-                    formErrors.filter(
-                        (err) => err !== 'position_id' && err !== 'team_id'
+                dispatch(
+                    createAction(
+                        coworkerTypes.SET_FORM_ERRORS,
+                        formErrors.filter(
+                            (err) => err !== 'position_id' && err !== 'team_id'
+                        )
                     )
                 );
             }
-            setUserObject({ ...userObject, team_id, position_id: id });
-            setActiveTeamId(team_id);
+            dispatch(
+                createAction(coworkerTypes.SET_USER_OBJECT, {
+                    ...userObject,
+                    team_id,
+                    position_id: id,
+                })
+            );
+            // setActiveTeamId(team_id);
+            dispatch(createAction(coworkerTypes.SET_ACTIVE_TEAM_ID, team_id));
             if (!teamsCurrData.length) {
                 axios('https://pcfy.redberryinternship.ge/api/teams').then(
                     ({ data: { data } }) => {
                         const [autoSelectTeam] = data.filter(
                             (obj) => obj.id === team_id
                         );
-                        setActiveNames({
-                            teams: autoSelectTeam.name,
-                            positions: name,
-                        });
+                        dispatch(
+                            createAction(coworkerTypes.SET_ACTIVE_NAMES, {
+                                teams: autoSelectTeam.name,
+                                positions: name,
+                            })
+                        );
                     }
                 );
             } else {
@@ -120,19 +165,31 @@ export const CoworkerInfo = () => {
                     (obj) => obj.id === team_id
                 );
                 console.log(name);
-                setActiveNames({
-                    teams: autoSelectTeam?.name,
-                    positions: name,
-                });
+                dispatch(
+                    createAction(coworkerTypes.SET_ACTIVE_NAMES, {
+                        teams: autoSelectTeam.name,
+                        positions: name,
+                    })
+                );
             }
 
             return;
         } else if (!dataObj?.team_id) {
             const { id, name } = dataObj;
-            setUserObject({ ...userObject, team_id: id, position_id: 0 });
-            setActiveTeamId(id);
-            setActiveNames({ positions: 'პოზიციები', teams: name });
-
+            dispatch(
+                createAction(coworkerTypes.SET_USER_OBJECT, {
+                    ...userObject,
+                    team_id: id,
+                    position_id: 0,
+                })
+            );
+            dispatch(createAction(coworkerTypes.SET_ACTIVE_TEAM_ID, id));
+            dispatch(
+                createAction(coworkerTypes.SET_ACTIVE_NAMES, {
+                    teams: name,
+                    positions: 'პოზიციები',
+                })
+            );
             return;
         }
     };
@@ -181,7 +238,9 @@ export const CoworkerInfo = () => {
         const invalidFieldsArray = formValidation();
         console.log(invalidFieldsArray);
         if (invalidFieldsArray.length) {
-            setFormErrors(invalidFieldsArray);
+            dispatch(
+                createAction(coworkerTypes.SET_FORM_ERRORS, invalidFieldsArray)
+            );
             return;
         }
         console.log(userObject);
@@ -192,10 +251,21 @@ export const CoworkerInfo = () => {
 
     const handleInputChange = (e) => {
         const inputType = e.target.name;
-        const value = e.target.value;
-        setUserObject({ ...userObject, [inputType]: value });
+        const value =
+            inputType === 'number' ? e.target.value.trim() : e.target.value;
+        dispatch(
+            createAction(coworkerTypes.SET_USER_OBJECT, {
+                ...userObject,
+                [inputType]: value,
+            })
+        );
         if (formErrors.includes(inputType)) {
-            setFormErrors(formErrors.filter((err) => err !== inputType));
+            dispatch(
+                createAction(
+                    coworkerTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== inputType)
+                )
+            );
         }
     };
 
