@@ -30,6 +30,7 @@ export const NavlinksContainer = styled.header`
     justify-content: space-around;
     align-items: center;
     max-width: 80rem;
+    pointer-events: none;
     a {
         text-decoration: none;
         color: #232323;

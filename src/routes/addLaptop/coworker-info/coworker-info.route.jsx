@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
     FormContainer,
     MultipleInputContainer,
-    RouteButtonsContainer,
-} from './coworker-info.styles';
+} from '../../../shared/formContainerWrappers/formContainerWrappers.js';
+import { RouteButtonsContainer } from './coworker-info.styles';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
@@ -13,7 +13,7 @@ import coworkerTypes from './coworker-info-actionTypes';
 import createAction from '../../../utils/action-creator';
 import coworkerReducer from './coworker-info.reducer';
 import { defaultState } from './coworker-info.reducer';
-export const CoworkerInfo = () => {
+export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
     const navigate = useNavigate();
     const [state, dispatch] = useReducer(coworkerReducer, defaultState);
     const didMountRef = useRef(false);
@@ -193,6 +193,8 @@ export const CoworkerInfo = () => {
             return;
         }
     };
+
+    // validates each form input cases and returns formError array as an error buffer array
     const formValidation = () => {
         const fields = Object.keys(userObject);
 
@@ -243,7 +245,7 @@ export const CoworkerInfo = () => {
             );
             return;
         }
-        console.log(userObject);
+        setMainDataObject({ ...mainDataObject, user: userObject });
         handleNextRoute();
 
         //post request

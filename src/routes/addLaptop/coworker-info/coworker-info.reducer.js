@@ -1,5 +1,6 @@
 import coworkerTypes from './coworker-info-actionTypes';
-const defaultForm = {
+
+const defaultUserObject = {
     name: '',
     surname: '',
     team_id: 0,
@@ -19,7 +20,7 @@ const defaultNames = {
 };
 
 export const defaultState = {
-    userObject: defaultForm,
+    userObject: defaultUserObject,
     formErrors: [],
     activeTeamId: 0,
     fetchedData: defaultData,

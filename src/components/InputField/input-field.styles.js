@@ -12,11 +12,14 @@ export const Label = styled.label`
 
 export const InputField = styled.input`
     width: 100%;
-    padding: 1.2rem 1.4rem;
+    width: ${({ wide }) => (wide === 'mid' ? 'width:80%' : 'width:100%')};
+    padding: 1.5rem 1.4rem;
+
     border-radius: 5px;
     border: 2px solid var(--light-blue-outline);
     transition: all 0.1s ease-in;
     outline: none;
+
     &:focus {
         background-color: #2b4bf20f;
         border: 2px solid #6499ff;
@@ -37,7 +40,7 @@ export const InputLabelWrapper = styled.div`
     justify-content: center;
     width: 100%;
     position: relative;
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
     &::after {
         position: absolute;
         font-size: clamp(0.8rem, 1vw, 1.6rem);

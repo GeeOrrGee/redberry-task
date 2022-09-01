@@ -141,9 +141,9 @@ import { Loader } from '../../shared/loader/loader.styles';
 // }
 // export default Dropdown;
 export const Dropdown = ({
-    name,
+    name, //displayName
     data = [],
-    callbackHandler,
+    callbackHandler, // fetchData
     onSelectHandler,
     ...otherProps
 }) => {

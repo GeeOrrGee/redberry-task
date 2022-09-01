@@ -7,12 +7,34 @@ import {
     VectorContainer,
 } from './add-laptop.styles';
 import { useEffect, useState } from 'react';
+import LaptopInfo from './laptop-info/laptop-info.route';
 //TODO extract data from childroutes, add conditional step increment based on the routes and add the last form page
 export const AddLaptop = () => {
+    const defaultDataState = { user: {}, laptop: {} };
     const navigate = useNavigate();
     const [mobileState, setMobileState] = useState(true);
+    const [mainDataObject, setMainDataObject] = useState(defaultDataState);
+    const [counter, setCounter] = useState(1);
     // console.log(redberrmobiyState);
 
+    useEffect(() => {
+        // setCounter(2);
+    }, [mainDataObject, counter]); //steps counter for mobileNav
+
+    useEffect(() => {
+        const persistedObjConfig = {
+            persistedMobileState: mobileState,
+            persistedMainDataObject: mainDataObject,
+            persistedCounter: counter,
+        };
+
+        localStorage.setItem(
+            'add-laptop-state',
+            JSON.stringify(persistedObjConfig)
+        );
+    }, [counter, mainDataObject, mobileState]);
+
+    //handling mobile navigation side effects
     useEffect(() => {
         const renderRedberryLogo = () => {
             const getCurrentWidth = window.innerWidth;
@@ -28,22 +50,30 @@ export const AddLaptop = () => {
         return window.removeEventListener('resize', () => renderRedberryLogo());
     }, [mobileState]);
 
+    //handling redirections
     useEffect(() => {
         const currUrl = window.location.pathname;
         const conditionalRedirection =
             currUrl.substring(currUrl.lastIndexOf('/' + 1)) === '/add-laptop';
         const savedProgress = JSON.parse(
-            localStorage.getItem('add-laptop-route')
+            localStorage.getItem('add-laptop-state')
         );
+        console.log(conditionalRedirection);
+        if (conditionalRedirection) {
+        } else if (savedProgress) {
+            const {
+                persistedMobileState,
+                persistedMainDataObject,
+                persistedCounter,
+            } = savedProgress;
 
-        if (savedProgress) {
-            navigate(savedProgress);
-        } else if (conditionalRedirection) {
-            navigate('/add-laptop/coworker-info');
+            setCounter(persistedCounter);
+            setMainDataObject(persistedMainDataObject);
+            setMobileState(persistedMobileState);
         }
     }, [navigate]);
 
-    const prevRoute = () => navigate(-2);
+    const prevRoute = () => navigate('/');
     return (
         <AddLaptopContainer>
             <VectorContainer onClick={prevRoute}>
@@ -67,10 +97,18 @@ export const AddLaptop = () => {
                     ლეპტოპის მახასიათებლები
                 </NavLink>
             </NavlinksContainer>
-            <p>asdasd</p>
+            <p>{counter}/2</p>
             <Routes>
-                <Route path='/coworker-info' element={<CoworkerInfo />} />
-                <Route path='/laptop-specs' element={<CoworkerInfo />} />
+                <Route
+                    path='/coworker-info'
+                    element={
+                        <CoworkerInfo
+                            mainDataObject={mainDataObject}
+                            setMainDataObject={setMainDataObject}
+                        />
+                    }
+                />
+                <Route path='/laptop-specs' element={<LaptopInfo />} />
             </Routes>
             {mobileState && (
                 <div>

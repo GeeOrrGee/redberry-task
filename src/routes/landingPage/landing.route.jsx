@@ -42,7 +42,7 @@ export const Landing = () => {
 
             {/* </ImageContainer> */}
             <ButtonsContainer>
-                <Link to={'/add-laptop'}>
+                <Link to={'/add-laptop/coworker-info'}>
                     <BlueButton>ჩანაწერის დამატება</BlueButton>
                 </Link>
 

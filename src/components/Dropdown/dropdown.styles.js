@@ -35,7 +35,8 @@ export const DropdownField = styled.div`
     justify-content: space-between;
     align-items: center;
     border-radius: 6px;
-    padding: 1rem 2rem;
+    padding: 1.7rem 2rem;
+    /* max-height: 6rem; */
     font-size: clamp(1.2rem, 1.2vw, 1.8rem);
     background-color: var(--grey-background);
     width: 100%;
