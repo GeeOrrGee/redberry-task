@@ -1,15 +1,10 @@
-import {
-    ButtonsContainer,
-    ImageContainer,
-    LandingPageContainer,
-} from './landing.styles';
+import { ButtonsContainer, LandingPageContainer } from './landing.styles';
 import { BlueButton } from '../../shared/blueButton/blue-button.styles';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 export const Landing = () => {
     const [mobileImageState, setMobileImageState] = useState(false);
-    console.log('LOOP?');
     const conditionalImageRender = () => {
         const currWidth = window.innerWidth;
         setMobileImageState(currWidth < 500);
@@ -23,7 +18,6 @@ export const Landing = () => {
     }, []);
     return (
         <LandingPageContainer>
-            {/* <ImageContainer> */}
             <img
                 src={require('../../assets/landingPage/LOGO-02 1.png')}
                 alt='logo'

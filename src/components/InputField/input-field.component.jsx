@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-import { InputLabelWrapper, Label, InputField } from './input-field.styles';
+import { InputLabelWrapper, InputField } from './input-field.styles';
+import { Label } from '../../shared/formContainerWrappers/formContainerWrappers';
 
 export const FormInput = ({ content, label, errorState, ...otherProps }) => {
     return (

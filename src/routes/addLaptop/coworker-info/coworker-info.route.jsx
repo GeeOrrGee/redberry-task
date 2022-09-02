@@ -4,7 +4,7 @@ import {
     FormContainer,
     MultipleInputContainer,
 } from '../../../shared/formContainerWrappers/formContainerWrappers.js';
-import { RouteButtonsContainer } from './coworker-info.styles';
+import { RouteButtonsContainer } from '../../../shared/formContainerWrappers/formContainerWrappers.js';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
@@ -63,10 +63,6 @@ export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
 
     const handleNextRoute = () => {
         navigate('/add-laptop/laptop-specs');
-    };
-
-    const handlePrevRoute = () => {
-        navigate(-1);
     };
 
     const handleTeamsDropdown = async () => {
@@ -220,7 +216,7 @@ export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
                 return !validEmail;
             }
 
-            if (field === 'number') {
+            if (field === 'phone_number') {
                 const notNumber = isNaN(parseInt(value.substring(1)));
                 const georgianNumber = value.slice(0, 5) === '+9955';
                 const validLength = value.substring(4).length === 9;
@@ -245,7 +241,7 @@ export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
             );
             return;
         }
-        setMainDataObject({ ...mainDataObject, user: userObject });
+        setMainDataObject({ ...mainDataObject, ...userObject });
         handleNextRoute();
 
         //post request
@@ -254,7 +250,9 @@ export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
     const handleInputChange = (e) => {
         const inputType = e.target.name;
         const value =
-            inputType === 'number' ? e.target.value.trim() : e.target.value;
+            inputType === 'phone_number'
+                ? e.target.value.trim()
+                : e.target.value;
         dispatch(
             createAction(coworkerTypes.SET_USER_OBJECT, {
                 ...userObject,
@@ -324,12 +322,12 @@ export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
             />
 
             <FormInput
-                name={'number'}
+                name={'phone_number'}
                 content={'უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს'}
                 label='ტელეფონის ნომერი'
                 onChange={handleInputChange}
                 errorState={formErrors.includes('number')}
-                value={`${userObject.number}`}
+                value={`${userObject.phone_number}`}
                 placeholder='ბაგრატიონი'
                 type='text'
                 required

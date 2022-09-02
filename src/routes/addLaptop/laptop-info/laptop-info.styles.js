@@ -1,5 +1,28 @@
 import styled from 'styled-components';
 
+export const SelectedImgFooter = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
+    button {
+        width: 30%;
+    }
+    div {
+        display: flex;
+        gap: 1rem;
+        p {
+            width: 100%;
+            max-width: 25rem;
+            overflow-x: scroll;
+            font-size: clamp(1rem, 1vw, 1.6rem);
+        }
+        align-items: center;
+        justify-content: space-between;
+    }
+`;
+
 export const DropzoneTextContainer = styled.div`
     position: absolute;
     display: flex;
@@ -10,9 +33,11 @@ export const DropzoneTextContainer = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    pointer-events: none;
     button {
         width: 50%;
         cursor: pointer;
+        pointer-events: auto;
     }
     p {
         color: var(--light-blue);
@@ -37,11 +62,22 @@ export const ImageDropInputContainer = styled.label`
     width: 100%;
     /* max-width: 65rem; */
 
-    height: 60vh;
+    height: 40vh;
 
-    background-image: ${({ backgroundUrl }) =>
+    /* background-image: ${({ backgroundUrl }) =>
         backgroundUrl && `url(${backgroundUrl})`};
     background-size: cover;
+    background-repeat: no-repeat; */
+    width: 100%;
+    img {
+        position: absolute;
+        width: 102%;
+        height: 108%;
+        border-radius: 8px;
+        top: -1%;
+    }
+
+    /* overflow: hidden; */
 
     max-height: 40rem;
     background-color: var(--greysh-background);
@@ -51,9 +87,25 @@ export const ImageDropInputContainer = styled.label`
     align-items: center;
     flex-direction: column;
     gap: clamp(3rem, 4vw, 8rem);
+    ${({ errorState }) =>
+        errorState &&
+        `
+         &::before {
+        opacity: 0.1;
+        content: '';
+        background-color: var(--error-red);
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0%;
+        width: 100%;
+    }
+     border: 3px dashed var(--error-red);
+     
 
+   `}
     position: relative;
-    border-radius: 6px;
+    border-radius: 8px;
 `;
 
 export const ThinLine = styled.div`
@@ -61,4 +113,5 @@ export const ThinLine = styled.div`
     height: 1px;
     background-color: grey;
     opacity: 0.6;
+    margin-block: 2rem;
 `;

@@ -6,7 +6,7 @@ const defaultUserObject = {
     team_id: 0,
     position_id: 0,
     email: '',
-    number: '',
+    phone_number: '',
 };
 
 const defaultData = {

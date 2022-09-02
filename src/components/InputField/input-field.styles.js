@@ -1,14 +1,4 @@
 import styled from 'styled-components';
-export const Label = styled.label`
-    font-size: clamp(1.1rem, 0.9vw, 2rem);
-    ${({ errorState }) =>
-        errorState &&
-        `
-
-       color: var(--error-red);
-      
-    `}
-`;
 
 export const InputField = styled.input`
     width: 100%;

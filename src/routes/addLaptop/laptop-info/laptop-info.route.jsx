@@ -1,44 +1,268 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
-import { InputField } from '../../../components/InputField/input-field.styles';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
+import { ReactComponent as Check } from '../../../assets/addLaptop/GreenCheck.svg';
 import {
     FormContainer,
     MultipleInputContainer,
+    RouteButtonsContainer,
 } from '../../../shared/formContainerWrappers/formContainerWrappers';
+import createAction from '../../../utils/action-creator';
+import { laptopInfoReducer, defaultState } from './laptop-info.reducer';
 import {
     DropzoneTextContainer,
     ImageDropInputContainer,
     ImageInput,
+    SelectedImgFooter,
     ThinLine,
 } from './laptop-info.styles';
 
+import { laptopInfoTypes } from './laptop-info.types';
+import { RadioButtons } from '../../../components/RadioButtons/radio-button.component';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 export const LaptopInfo = () => {
-    const imageInputRef = useRef(false);
-    const [imageInputDragEnter, setImageInputDragEnter] = useState(false);
-    const [imageUrl, setImageUrl] = useState('');
+    const imageInputRef = useRef();
+    const [state, dispatch] = useReducer(laptopInfoReducer, defaultState);
+
+    useEffect(() => {
+        const persistedState = JSON.parse(
+            localStorage.getItem('laptop-info-state')
+        );
+        if (persistedState) {
+            dispatch(
+                createAction(laptopInfoTypes.REHYDRATE_STATE, persistedState)
+            );
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('laptop-info-state', JSON.stringify(state));
+    }, [state]);
+
+    const {
+        activeNames,
+        laptopFormObject,
+        imageInputDragEnter,
+        formErrors,
+        fetchedData,
+        currData,
+    } = state;
 
     const dragHandler = (e) => {
         e.stopPropagation();
-        setImageInputDragEnter(!imageInputDragEnter);
+
+        dispatch(
+            createAction(
+                laptopInfoTypes.SET_IMAGE_INPUT_DRAG_ENTER,
+                !imageInputDragEnter
+            )
+        );
     };
 
-    const addPhotoHandler = () => {
+    const addPhotoHandler = (e) => {
+        e.preventDefault();
         imageInputRef.current.click();
     };
 
+    const removeImgHandler = (e) => {
+        e.preventDefault();
+
+        dispatch(
+            createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                ...laptopFormObject,
+                laptop_image: null,
+            })
+        );
+    };
     const dropHandler = (e) => {
-        e.stopPropagation();
-        if (e.target.files[0]) {
-            setImageUrl(URL.createObjectURL(e.target.files[0]));
+        // e.stopPropagation();
+        if (formErrors.includes('laptop_image')) {
+            dispatch(
+                createAction(
+                    laptopInfoTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== 'laptop_image')
+                )
+            );
         }
-        setImageInputDragEnter(false);
+        if (e.target.files && e.target.files[0]) {
+            dispatch(
+                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                    ...laptopFormObject,
+                    laptop_image: e.target.files[0],
+                })
+            );
+        }
+        dispatch(
+            createAction(laptopInfoTypes.SET_IMAGE_INPUT_DRAG_ENTER, false)
+        );
     };
 
+    const onBrandsDropdownHandler = async () => {
+        if (fetchedData.brands?.length) return;
+        try {
+            const {
+                data: { data },
+            } = await axios('https://pcfy.redberryinternship.ge/api/brands');
+
+            const modifiedData = data.map((obj) => ({
+                ...obj,
+                fieldName: 'laptop_brand_id',
+            }));
+            dispatch(
+                createAction(laptopInfoTypes.SET_FETCHED_DATA, {
+                    ...fetchedData,
+                    brands: modifiedData,
+                })
+            );
+        } catch (err) {
+            throw err;
+        }
+    };
+    const onCpuDropdownHandler = async () => {
+        if (fetchedData.cpus?.length) return;
+        try {
+            const {
+                data: { data },
+            } = await axios('https://pcfy.redberryinternship.ge/api/cpus');
+
+            const modifiedData = data.map((obj) => ({
+                ...obj,
+                fieldName: 'laptop_cpu',
+            }));
+
+            dispatch(
+                createAction(laptopInfoTypes.SET_FETCHED_DATA, {
+                    ...fetchedData,
+                    cpus: modifiedData,
+                })
+            );
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    const onDropDownSelectHandler = (dataObj) => {
+        const { fieldName, name, id } = dataObj;
+        if (formErrors.includes(fieldName)) {
+            dispatch(
+                createAction(
+                    laptopInfoTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== fieldName)
+                )
+            );
+        }
+        dispatch(
+            createAction(laptopInfoTypes.SET_ACTIVE_NAMES, {
+                ...activeNames,
+                [fieldName]: name,
+            })
+        );
+        if (fieldName === 'laptop_cpu') {
+            dispatch(
+                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                    ...laptopFormObject,
+                    [fieldName]: name,
+                })
+            );
+            return;
+        } else if (fieldName === 'laptop_brand_id') {
+            dispatch(
+                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                    ...laptopFormObject,
+                    [fieldName]: id,
+                })
+            );
+            return;
+        }
+    };
+
+    const onRadioSelectHandler = (key, value) => {
+        if (formErrors.includes(key)) {
+            dispatch(
+                createAction(
+                    laptopInfoTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== key)
+                )
+            );
+        }
+        if (value === laptopFormObject[key]) return;
+        console.log(key, value);
+        dispatch(
+            createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                ...laptopFormObject,
+                [key]: value,
+            })
+        );
+    };
+
+    const onChangeHandler = (e) => {
+        const inputType = e.target.name;
+        const value = e.target.value;
+        if (formErrors.includes(inputType)) {
+            dispatch(
+                createAction(
+                    laptopInfoTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== inputType)
+                )
+            );
+        }
+        if (e.target.type === 'number') {
+            dispatch(
+                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                    ...laptopFormObject,
+                    [inputType]: value ? parseFloat(value) : '',
+                })
+            );
+            return;
+        }
+
+        dispatch(
+            createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                ...laptopFormObject,
+                [inputType]: value,
+            })
+        );
+    };
+
+    const formValidation = () => {
+        const fields = Object.keys(laptopFormObject);
+
+        const errorsArray = fields.filter((field) => {
+            const value = laptopFormObject[field];
+            if (field === 'laptop_purchase_date' && !value) {
+                return false;
+            } else if (field === 'laptop_purchase_date') {
+                const correctDate = value.match(
+                    /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
+                );
+                return !correctDate;
+            }
+            if (!value) return !value;
+            if (field === 'laptop_name') {
+                const containsCorrectCharacters = value.match(
+                    /^[~`!@#$%^&*()_+=[\]\\{}|;':",.\/<>?a-zA-Z0-9-]+$/
+                );
+                return !containsCorrectCharacters;
+            }
+            return !value;
+        });
+        return errorsArray;
+    };
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+        const errArray = formValidation();
+        if (errArray.length) {
+            dispatch(createAction(laptopInfoTypes.SET_FORM_ERRORS, errArray));
+            return;
+        }
+    };
     return (
-        <FormContainer>
-            <ImageDropInputContainer backgroundUrl={imageUrl}>
+        <FormContainer onSubmit={onSubmitHandler}>
+            <ImageDropInputContainer
+                errorState={formErrors.includes('laptop_image')}
+            >
                 <ImageInput
                     onDragLeave={(e) => dragHandler(e)}
                     onDragEnter={(e) => dragHandler(e)}
@@ -48,7 +272,7 @@ export const LaptopInfo = () => {
                     accept='image/*'
                     ref={imageInputRef}
                 />
-                {!imageUrl && (
+                {!laptopFormObject.laptop_image ? (
                     <DropzoneTextContainer>
                         {imageInputDragEnter ? (
                             <p>Drop Here !</p>
@@ -65,32 +289,73 @@ export const LaptopInfo = () => {
                             </>
                         )}
                     </DropzoneTextContainer>
+                ) : (
+                    <img
+                        src={URL.createObjectURL(laptopFormObject.laptop_image)}
+                        alt='user-upload'
+                    />
                 )}
             </ImageDropInputContainer>
+            {laptopFormObject.laptop_image && (
+                <SelectedImgFooter>
+                    <div>
+                        <Check />
+                        <p>{laptopFormObject.laptop_image.name}</p>
+                    </div>
+                    <BlueButton type='button' onClick={removeImgHandler}>
+                        asda
+                    </BlueButton>
+                </SelectedImgFooter>
+            )}
+
             <MultipleInputContainer>
                 <FormInput
                     label='ლეპტოპის სახელი'
+                    name='laptop_name'
                     placeholder='HP'
                     wide='mid'
                     type='text'
                     content={'ლათინური ასოები, ციფრები, !@#$%^&*()_+= '}
+                    value={laptopFormObject.laptop_name}
+                    onChange={onChangeHandler}
+                    errorState={formErrors.includes('laptop_name')}
                 />
-                <Dropdown name={'ლეპტოპის ბრენდი'} />
+                <Dropdown
+                    name={activeNames.laptop_brand_id}
+                    callbackHandler={onBrandsDropdownHandler}
+                    data={currData.brands}
+                    onSelectHandler={onDropDownSelectHandler}
+                    errorState={formErrors.includes('laptop_brand_id')}
+                />
             </MultipleInputContainer>
             <ThinLine />
             <MultipleInputContainer>
-                <Dropdown name={'CPU'} />
+                <Dropdown
+                    data={currData.cpus}
+                    name={activeNames.laptop_cpu}
+                    callbackHandler={onCpuDropdownHandler}
+                    onSelectHandler={onDropDownSelectHandler}
+                    errorState={formErrors.includes('laptop_cpu')}
+                />
                 <FormInput
                     label='CPU-ს ბირთვი'
                     content={'მხოლოდ ციფრები'}
                     placeholder='14'
                     type='number'
+                    name='laptop_cpu_cores'
+                    value={laptopFormObject.laptop_cpu_cores}
+                    onChange={onChangeHandler}
+                    errorState={formErrors.includes('laptop_cpu_cores')}
                 />
                 <FormInput
                     type='number'
                     label='CPU-ს ნაკადი'
                     content={'მხოლოდ ციფრები'}
+                    name='laptop_cpu_threads'
                     placeholder='365'
+                    value={laptopFormObject.laptop_cpu_threads}
+                    onChange={onChangeHandler}
+                    errorState={formErrors.includes('laptop_cpu_threads')}
                 />
             </MultipleInputContainer>
             <MultipleInputContainer>
@@ -99,6 +364,18 @@ export const LaptopInfo = () => {
                     label={'ლეპტოპის RAM (GB)'}
                     content='მხოლოდ ციფრები'
                     placeholder='16'
+                    name='laptop_ram'
+                    value={laptopFormObject.laptop_ram}
+                    onChange={onChangeHandler}
+                    errorState={formErrors.includes('laptop_ram')}
+                />
+
+                <RadioButtons
+                    label={'მეხსიერების ტიპი'}
+                    data={['SSD', 'HDD']}
+                    name={'laptop_hard_drive_type'}
+                    callbackHandler={onRadioSelectHandler}
+                    errorState={formErrors.includes('laptop_hard_drive_type')}
                 />
             </MultipleInputContainer>
             <ThinLine />
@@ -107,14 +384,36 @@ export const LaptopInfo = () => {
                 <FormInput
                     label={'შეძენის რიცხვი (არჩევითი)'}
                     placeholder='დდ / თთ / წწწწ'
+                    name='laptop_purchase_date'
+                    value={laptopFormObject.laptop_purchase_date}
+                    onChange={onChangeHandler}
+                    errorState={formErrors.includes('laptop_purchase_date')}
                 />
                 <FormInput
                     type='number'
                     label={'ლეპტოპის ფასი'}
                     content='ლეპტოპის ფასი'
                     placeholder='0000'
+                    name='laptop_price'
+                    value={laptopFormObject.laptop_price}
+                    onChange={onChangeHandler}
+                    errorState={formErrors.includes('laptop_name')}
                 />
             </MultipleInputContainer>
+
+            <RadioButtons
+                label={'მეხსიერების ტიპი'}
+                data={['ახალი', 'მეორადი']}
+                name={'laptop_state'}
+                callbackHandler={onRadioSelectHandler}
+                errorState={formErrors.includes('laptop_state')}
+            />
+            <RouteButtonsContainer>
+                <Link to='/add-laptop/coworker-info'>უკან</Link>
+                <div>
+                    <BlueButton type='submit'>დამახსოვრება</BlueButton>
+                </div>
+            </RouteButtonsContainer>
         </FormContainer>
     );
 };

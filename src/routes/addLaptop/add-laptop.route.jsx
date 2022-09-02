@@ -8,17 +8,35 @@ import {
 } from './add-laptop.styles';
 import { useEffect, useState } from 'react';
 import LaptopInfo from './laptop-info/laptop-info.route';
+import axios from 'axios';
 //TODO extract data from childroutes, add conditional step increment based on the routes and add the last form page
 export const AddLaptop = () => {
-    const defaultDataState = { user: {}, laptop: {} };
     const navigate = useNavigate();
     const [mobileState, setMobileState] = useState(true);
-    const [mainDataObject, setMainDataObject] = useState(defaultDataState);
+    const [mainDataObject, setMainDataObject] = useState('');
     const [counter, setCounter] = useState(1);
     // console.log(redberrmobiyState);
 
+    // const postRequest = async () => {
+    //     try {
+    //         const fd = new FormData();
+    //         Object.keys(mainDataObject).forEach((key) => {
+    //             fd.append(key, mainDataObject[key]);
+    //         });
+    //         fd.append('token', 'd7aa0f4140e9ce11f81c9622c4d84673');
+    //         const response = await axios.postForm(
+    //             'https://pcfy.redberryinternship.ge/api/laptop/create',
+    //             fd
+    //         );
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+
+    // postRequest();
     useEffect(() => {
         // setCounter(2);
+        console.log(mainDataObject);
     }, [mainDataObject, counter]); //steps counter for mobileNav
 
     useEffect(() => {
