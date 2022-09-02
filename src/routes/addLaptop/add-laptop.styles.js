@@ -22,19 +22,28 @@ export const VectorContainer = styled.div`
         transform: scale(115%);
     }
     transition: all 0.2s;
+    @media (max-width: 50em) {
+        background-color: unset;
+        top: 4%;
+        left: 3%;
+        width: 4rem;
+        height: 4rem;
+    }
 `;
 
 export const NavlinksContainer = styled.header`
     display: flex;
-    width: 50%;
+    width: 60%;
     justify-content: space-around;
     align-items: center;
     max-width: 80rem;
     pointer-events: none;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
     a {
         text-decoration: none;
         color: #232323;
-        font-size: clamp(1.2rem, 1.2vw, 2rem);
+        font-size: clamp(1.4rem, 1.2vw, 2rem);
         font-weight: 700;
         cursor: pointer;
         display: inline-block;
@@ -69,6 +78,10 @@ export const NavlinksContainer = styled.header`
     }
     & ~ p {
         margin-bottom: 1.5rem;
+        font-size: 1.2rem;
+        opacity: 0.4;
+        letter-spacing: 0.2rem;
+        font-weight: 700;
     }
     @media (max-width: 50em) {
         padding-top: 2rem;

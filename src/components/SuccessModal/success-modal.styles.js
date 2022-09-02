@@ -5,6 +5,8 @@ export const SuccessMessageContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    max-width: 27rem;
+    height: 100%;
     img {
         width: 100%;
         object-fit: contain;
@@ -12,7 +14,8 @@ export const SuccessMessageContainer = styled.div`
 
     h2 {
         text-align: center;
-        font-size: clamp(1.4rem, 1.4vw, 2.2rem);
+        font-size: clamp(1.6rem, 10vw, 2.2rem);
+        line-height: 1.6;
     }
 `;
 
@@ -21,9 +24,12 @@ export const LinksContainer = styled.div`
     flex-direction: column;
     width: 100%;
     max-width: 30rem;
-    gap: clamp(1.5rem, 1.5vw, 3rem);
+    gap: clamp(1.5rem, 10vw, 3rem);
+
     align-items: center;
+
     justify-content: center;
+    height: 40%;
     a {
         transition: all 0.1s ease-in;
         color: var(--light-blue);
@@ -43,6 +49,9 @@ export const LinksContainer = styled.div`
             width: 100%;
             transition: all 0.1s ease-in;
             max-width: 30rem;
+            @media (max-width: 50em) {
+                font-size: 1.6rem;
+            }
         }
     }
 `;
@@ -72,4 +81,13 @@ export const SuccessModalContainer = styled.figure`
     border-radius: 15px;
     background-color: white;
     padding-block: 2rem;
+    @media (max-width: 50em) {
+        width: 100vw;
+        height: 100vh;
+        max-height: unset;
+        border-radius: 0px;
+
+        justify-content: end;
+        /* gap: clamp(6rem, 12vh, 15rem); */
+    }
 `;

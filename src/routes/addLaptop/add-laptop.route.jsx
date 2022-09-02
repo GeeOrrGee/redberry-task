@@ -11,7 +11,6 @@ import LaptopInfo from './laptop-info/laptop-info.route';
 import axios from 'axios';
 import { Loader, LoaderContainer } from '../../shared/loader/loader.styles';
 import { SuccessModal } from '../../components/SuccessModal/success-modal.component';
-//TODO extract data from childroutes, add conditional step increment based on the routes and add the last form page
 export const AddLaptop = () => {
     const didMountRef = useRef(false);
     const navigate = useNavigate();
@@ -19,7 +18,6 @@ export const AddLaptop = () => {
     const [mainDataObject, setMainDataObject] = useState('');
     const [sendData, setSendData] = useState(false);
     const [loadingState, setLoadingState] = useState(false);
-    // console.log(redberrmobiyState);
 
     useEffect(() => {
         const postRequest = async () => {
@@ -33,11 +31,12 @@ export const AddLaptop = () => {
                     'https://pcfy.redberryinternship.ge/api/laptop/create',
                     fd
                 );
-                console.log(response);
                 setLoadingState(false);
                 setSendData(true);
+                console.log(response);
             } catch (err) {
-                console.log(err);
+                alert(err);
+                throw new Error();
             }
         };
         if (loadingState) {
@@ -47,10 +46,9 @@ export const AddLaptop = () => {
 
     useEffect(() => {
         if (didMountRef.current && mainDataObject) {
-            console.log(mainDataObject);
             const persistedObjConfig = {
                 persistedMainDataObject: mainDataObject,
-                persistedLoadingState: loadingState,
+
                 persistedSendDataState: sendData,
             };
 
@@ -67,7 +65,7 @@ export const AddLaptop = () => {
     useEffect(() => {
         const renderRedberryLogo = () => {
             const getCurrentWidth = window.innerWidth;
-            if (getCurrentWidth < 801 && !mobileState) {
+            if (getCurrentWidth < 801) {
                 setMobileState(true);
                 console.log(getCurrentWidth, mobileState);
             } else if (getCurrentWidth > 800) {
@@ -87,19 +85,15 @@ export const AddLaptop = () => {
             localStorage.getItem('add-laptop-state')
         );
         if (savedProgress) {
-            const {
-                persistedMainDataObject,
-                persistedLoadingState,
-                persistedSendDataState,
-            } = savedProgress;
+            const { persistedMainDataObject, persistedSendDataState } =
+                savedProgress;
 
-            setLoadingState(persistedLoadingState);
             setSendData(persistedSendDataState);
             setMainDataObject(persistedMainDataObject);
         }
     }, [navigate]);
 
-    const prevRoute = () => navigate('/');
+    const prevRoute = () => navigate(-1);
     return (
         // <LoaderContainer>
         //     <Loader />
@@ -115,9 +109,11 @@ export const AddLaptop = () => {
                 {!sendData ? (
                     <>
                         {' '}
-                        <VectorContainer onClick={prevRoute}>
-                            <Vector />
-                        </VectorContainer>
+                        {
+                            <VectorContainer onClick={prevRoute}>
+                                <Vector />
+                            </VectorContainer>
+                        }
                         <NavlinksContainer>
                             <NavLink
                                 className={({ isActive }) =>
@@ -136,6 +132,7 @@ export const AddLaptop = () => {
                                 ლეპტოპის მახასიათებლები
                             </NavLink>
                         </NavlinksContainer>
+                        {mobileState && <p>{!mainDataObject ? 1 : 2}/2</p>}
                         <Routes>
                             <Route
                                 path='/coworker-info'

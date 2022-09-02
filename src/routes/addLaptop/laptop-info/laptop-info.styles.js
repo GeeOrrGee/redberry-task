@@ -7,7 +7,8 @@ export const SelectedImgFooter = styled.div`
     width: 100%;
     margin-bottom: 2rem;
     button {
-        width: 30%;
+        width: 35%;
+        font-size: clamp(1rem, 1vw, 1.6rem);
     }
     div {
         display: flex;
@@ -17,6 +18,9 @@ export const SelectedImgFooter = styled.div`
             max-width: 22rem;
             overflow-x: scroll;
             font-size: clamp(1rem, 1vw, 1.6rem);
+            @media (max-width: 50em) {
+                max-width: 15rem;
+            }
         }
         align-items: center;
         justify-content: space-between;

@@ -34,4 +34,5 @@ export const LoaderContainer = styled.div`
     justify-content: center;
     align-items: center;
     background-color: rgb(255, 255, 255, 0.8);
+    z-index: 2;
 `;
