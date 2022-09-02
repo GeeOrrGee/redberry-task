@@ -14,7 +14,7 @@ export const SelectedImgFooter = styled.div`
         gap: 1rem;
         p {
             width: 100%;
-            max-width: 25rem;
+            max-width: 22rem;
             overflow-x: scroll;
             font-size: clamp(1rem, 1vw, 1.6rem);
         }

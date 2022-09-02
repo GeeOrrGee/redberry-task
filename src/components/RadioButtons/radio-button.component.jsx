@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Label } from '../../shared/formContainerWrappers/formContainerWrappers';
 import {
     RadioButton,
@@ -14,7 +14,30 @@ export const RadioButtons = ({
     callbackHandler,
     name,
 }) => {
+    const didMountRef = useRef(false);
     const [currentActive, setCurrentActive] = useState('');
+    useEffect(() => {
+        const persistedState = JSON.parse(
+            localStorage.getItem('radio-btn-state')
+        );
+
+        if (persistedState) {
+            // const { name } = persistedState;
+            setCurrentActive(persistedState);
+            return;
+        }
+    }, []);
+
+    useEffect(() => {
+        if (didMountRef.current) {
+            localStorage.setItem(
+                'radio-btn-state',
+                JSON.stringify(currentActive)
+            );
+        }
+
+        didMountRef.current = true;
+    }, [currentActive]);
 
     const onRadioClickHandler = (btnValue) => {
         setCurrentActive(btnValue);

@@ -326,7 +326,7 @@ export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
                 content={'უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს'}
                 label='ტელეფონის ნომერი'
                 onChange={handleInputChange}
-                errorState={formErrors.includes('number')}
+                errorState={formErrors.includes('phone_number')}
                 value={`${userObject.phone_number}`}
                 placeholder='ბაგრატიონი'
                 type='text'

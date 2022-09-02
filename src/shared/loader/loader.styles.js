@@ -20,3 +20,18 @@ export const Loader = styled.div`
         }
     }
 `;
+
+export const LoaderContainer = styled.div`
+    position: fixed;
+    /* top: 50%;
+    left: 50%; */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 255, 255, 0.8);
+`;

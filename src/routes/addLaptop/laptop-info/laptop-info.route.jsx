@@ -3,6 +3,7 @@ import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { ReactComponent as Check } from '../../../assets/addLaptop/GreenCheck.svg';
+import { Buffer } from 'buffer';
 import {
     FormContainer,
     MultipleInputContainer,
@@ -34,11 +35,19 @@ const laptopCondition = [
 export const LaptopInfo = ({
     mainDataObject,
     setMainDataObject,
-    setSendData,
+    setLoadingState,
 }) => {
     const imageInputRef = useRef();
     const didMountRef = useRef(false);
     const [state, dispatch] = useReducer(laptopInfoReducer, defaultState);
+    const {
+        activeNames,
+        laptopFormObject,
+        imageInputDragEnter,
+        formErrors,
+        fetchedData,
+        currData,
+    } = state;
 
     useEffect(() => {
         const persistedState = JSON.parse(
@@ -55,19 +64,20 @@ export const LaptopInfo = ({
 
     useEffect(() => {
         if (didMountRef.current) {
-            localStorage.setItem('laptop-info-state', JSON.stringify(state));
+            const modifiedState = {
+                ...state,
+                laptopFormObject: {
+                    ...laptopFormObject,
+                    laptop_image: null,
+                },
+            };
+            localStorage.setItem(
+                'laptop-info-state',
+                JSON.stringify(modifiedState)
+            );
         }
         didMountRef.current = true;
-    }, [state]);
-
-    const {
-        activeNames,
-        laptopFormObject,
-        imageInputDragEnter,
-        formErrors,
-        fetchedData,
-        currData,
-    } = state;
+    }, [laptopFormObject, state]);
 
     const dragHandler = (e) => {
         e.stopPropagation();
@@ -277,7 +287,7 @@ export const LaptopInfo = ({
             return;
         }
         setMainDataObject({ ...mainDataObject, ...laptopFormObject });
-        setSendData(true);
+        setLoadingState(true);
     };
     return (
         <FormContainer onSubmit={onSubmitHandler}>
@@ -312,7 +322,13 @@ export const LaptopInfo = ({
                     </DropzoneTextContainer>
                 ) : (
                     <img
-                        // src={URL.createObjectURL(laptopFormObject.laptop_image)}
+                        src={
+                            laptopFormObject.laptop_image !== null
+                                ? URL.createObjectURL(
+                                      laptopFormObject.laptop_image
+                                  )
+                                : ''
+                        }
                         alt='user-upload'
                     />
                 )}
