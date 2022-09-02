@@ -19,7 +19,8 @@ export const RouteButtonsContainer = styled.div`
         display: inline-block;
         width: 100%;
         color: var(--light-blue);
-        font-size: clamp(1rem, 1vw, 2rem);
+        text-decoration: none;
+        font-size: clamp(1.4rem, 1vw, 2rem);
         margin-left: 2rem;
         &:visited {
             color: var(--light-blue);

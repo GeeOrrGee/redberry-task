@@ -24,10 +24,12 @@ export const RadioButtons = ({
         <RadioContainer>
             <Label errorState={errorState}>{label}</Label>
             <RadioOptionsContainer>
-                {data.map((type) => {
+                {data.map(({ type, value }) => {
                     return (
-                        <RadioOption onClick={(e) => onRadioClickHandler(type)}>
-                            <RadioButton active={type === currentActive} />
+                        <RadioOption
+                            onClick={(e) => onRadioClickHandler(value)}
+                        >
+                            <RadioButton active={value === currentActive} />
                             <span>{type}</span>
                         </RadioOption>
                     );

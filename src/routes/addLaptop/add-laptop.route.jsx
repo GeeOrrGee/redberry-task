@@ -15,25 +15,32 @@ export const AddLaptop = () => {
     const [mobileState, setMobileState] = useState(true);
     const [mainDataObject, setMainDataObject] = useState('');
     const [counter, setCounter] = useState(1);
+    const [sendData, setSendData] = useState(false);
     // console.log(redberrmobiyState);
 
-    // const postRequest = async () => {
-    //     try {
-    //         const fd = new FormData();
-    //         Object.keys(mainDataObject).forEach((key) => {
-    //             fd.append(key, mainDataObject[key]);
-    //         });
-    //         fd.append('token', 'd7aa0f4140e9ce11f81c9622c4d84673');
-    //         const response = await axios.postForm(
-    //             'https://pcfy.redberryinternship.ge/api/laptop/create',
-    //             fd
-    //         );
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-
-    // postRequest();
+    useEffect(() => {
+        const postRequest = async () => {
+            try {
+                console.log(mainDataObject);
+                const fd = new FormData();
+                Object.keys(mainDataObject).forEach((key) => {
+                    fd.append(key, mainDataObject[key]);
+                });
+                fd.append('token', 'd7aa0f4140e9ce11f81c9622c4d84673');
+                const response = await axios.postForm(
+                    'https://pcfy.redberryinternship.ge/api/laptop/create',
+                    fd
+                );
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        if (sendData) {
+            postRequest();
+            setSendData(false);
+        }
+    }, [mainDataObject, sendData]);
     useEffect(() => {
         // setCounter(2);
         console.log(mainDataObject);
@@ -126,7 +133,16 @@ export const AddLaptop = () => {
                         />
                     }
                 />
-                <Route path='/laptop-specs' element={<LaptopInfo />} />
+                <Route
+                    path='/laptop-specs'
+                    element={
+                        <LaptopInfo
+                            mainDataObject={mainDataObject}
+                            setMainDataObject={setMainDataObject}
+                            setSendData={setSendData}
+                        />
+                    }
+                />
             </Routes>
             {mobileState && (
                 <div>

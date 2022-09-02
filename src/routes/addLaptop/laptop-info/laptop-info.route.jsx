@@ -22,23 +22,42 @@ import { laptopInfoTypes } from './laptop-info.types';
 import { RadioButtons } from '../../../components/RadioButtons/radio-button.component';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-export const LaptopInfo = () => {
+
+const diskTypes = [
+    { type: 'SSD', value: 'SSD' },
+    { type: 'HDD', value: 'HDD' },
+];
+const laptopCondition = [
+    { type: 'ახალი', value: 'new' },
+    { type: 'მეორადი', value: 'used' },
+];
+export const LaptopInfo = ({
+    mainDataObject,
+    setMainDataObject,
+    setSendData,
+}) => {
     const imageInputRef = useRef();
+    const didMountRef = useRef(false);
     const [state, dispatch] = useReducer(laptopInfoReducer, defaultState);
 
     useEffect(() => {
         const persistedState = JSON.parse(
             localStorage.getItem('laptop-info-state')
         );
+
         if (persistedState) {
             dispatch(
                 createAction(laptopInfoTypes.REHYDRATE_STATE, persistedState)
             );
         }
+        console.log(persistedState);
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('laptop-info-state', JSON.stringify(state));
+        if (didMountRef.current) {
+            localStorage.setItem('laptop-info-state', JSON.stringify(state));
+        }
+        didMountRef.current = true;
     }, [state]);
 
     const {
@@ -68,6 +87,7 @@ export const LaptopInfo = () => {
 
     const removeImgHandler = (e) => {
         e.preventDefault();
+        imageInputRef.current.value = null;
 
         dispatch(
             createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
@@ -188,7 +208,6 @@ export const LaptopInfo = () => {
             );
         }
         if (value === laptopFormObject[key]) return;
-        console.log(key, value);
         dispatch(
             createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
                 ...laptopFormObject,
@@ -257,6 +276,8 @@ export const LaptopInfo = () => {
             dispatch(createAction(laptopInfoTypes.SET_FORM_ERRORS, errArray));
             return;
         }
+        setMainDataObject({ ...mainDataObject, ...laptopFormObject });
+        setSendData(true);
     };
     return (
         <FormContainer onSubmit={onSubmitHandler}>
@@ -291,7 +312,7 @@ export const LaptopInfo = () => {
                     </DropzoneTextContainer>
                 ) : (
                     <img
-                        src={URL.createObjectURL(laptopFormObject.laptop_image)}
+                        // src={URL.createObjectURL(laptopFormObject.laptop_image)}
                         alt='user-upload'
                     />
                 )}
@@ -303,7 +324,7 @@ export const LaptopInfo = () => {
                         <p>{laptopFormObject.laptop_image.name}</p>
                     </div>
                     <BlueButton type='button' onClick={removeImgHandler}>
-                        asda
+                        თავიდან ატვირთე
                     </BlueButton>
                 </SelectedImgFooter>
             )}
@@ -372,7 +393,7 @@ export const LaptopInfo = () => {
 
                 <RadioButtons
                     label={'მეხსიერების ტიპი'}
-                    data={['SSD', 'HDD']}
+                    data={diskTypes}
                     name={'laptop_hard_drive_type'}
                     callbackHandler={onRadioSelectHandler}
                     errorState={formErrors.includes('laptop_hard_drive_type')}
@@ -403,7 +424,7 @@ export const LaptopInfo = () => {
 
             <RadioButtons
                 label={'მეხსიერების ტიპი'}
-                data={['ახალი', 'მეორადი']}
+                data={laptopCondition}
                 name={'laptop_state'}
                 callbackHandler={onRadioSelectHandler}
                 errorState={formErrors.includes('laptop_state')}
