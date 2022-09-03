@@ -5,6 +5,8 @@ import { MainContainer } from './App.styles.js';
 import { AddLaptop } from './routes/addLaptop/add-laptop.route.jsx';
 import axios from 'axios';
 import { useEffect } from 'react';
+import Laptops from './routes/laptops/laptops.route.jsx';
+// import Laptops from './routes/laptops/laptopsList/laptops-list.route.jsx';
 
 function App() {
     const conditionalBackground =
@@ -15,10 +17,7 @@ function App() {
             <Routes>
                 <Route path='/' element={<Landing />} />
                 <Route path='/add-laptop/*' element={<AddLaptop />} />
-                <Route
-                    path='/laptops/'
-                    element={<input type='file' accept='image/*' />}
-                />
+                <Route path='/laptops/*' element={<Laptops />} />
             </Routes>
         </MainContainer>
     );

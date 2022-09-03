@@ -35,6 +35,15 @@ export const RadioOptionsContainer = styled.div`
 `;
 
 export const RadioContainer = styled.figure`
+    svg {
+        width: 2.2rem;
+        height: 2.2rem;
+        position: absolute;
+        /* top: -5%;
+        left: 40%; */
+        transform: translate(55%, -18%);
+    }
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 2.2rem;

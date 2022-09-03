@@ -18,6 +18,7 @@ export const GlobalStyle = styled.createGlobalStyle`
     html {
         font-family: 'helvetica-neue', sans-serif;
         font-size: 10px;
+        /* text-transform: uppercase; */
     }
 
     :root {

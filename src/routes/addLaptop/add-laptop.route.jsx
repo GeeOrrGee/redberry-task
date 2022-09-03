@@ -18,6 +18,16 @@ export const AddLaptop = () => {
     const [mainDataObject, setMainDataObject] = useState('');
     const [sendData, setSendData] = useState(false);
     const [loadingState, setLoadingState] = useState(false);
+    const [counter, setCounter] = useState('');
+
+    const currUrl = window.location.pathname;
+    useEffect(() => {
+        const currentStep =
+            currUrl.substring(currUrl.lastIndexOf('/') + 1) === 'coworker-info'
+                ? 1
+                : 2;
+        setCounter(currentStep);
+    }, [currUrl]);
 
     useEffect(() => {
         const postRequest = async () => {
@@ -48,7 +58,6 @@ export const AddLaptop = () => {
         if (didMountRef.current && mainDataObject) {
             const persistedObjConfig = {
                 persistedMainDataObject: mainDataObject,
-
                 persistedSendDataState: sendData,
             };
 
@@ -95,9 +104,6 @@ export const AddLaptop = () => {
 
     const prevRoute = () => navigate(-1);
     return (
-        // <LoaderContainer>
-        //     <Loader />
-        // </LoaderContainer>
         <>
             {loadingState && (
                 <LoaderContainer>
@@ -132,7 +138,7 @@ export const AddLaptop = () => {
                                 ლეპტოპის მახასიათებლები
                             </NavLink>
                         </NavlinksContainer>
-                        {mobileState && <p>{!mainDataObject ? 1 : 2}/2</p>}
+                        {mobileState && <p>{counter}/2</p>}
                         <Routes>
                             <Route
                                 path='/coworker-info'
@@ -151,6 +157,7 @@ export const AddLaptop = () => {
                                         setMainDataObject={setMainDataObject}
                                         setSendData={setSendData}
                                         setLoadingState={setLoadingState}
+                                        mobileState={mobileState}
                                     />
                                 }
                             />

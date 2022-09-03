@@ -33,7 +33,12 @@ export const DropzoneTextContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: clamp(5rem, 4vw, 8rem);
+    gap: clamp(3rem, 3vw, 6rem);
+    svg {
+        width: 4rem;
+        height: 4rem;
+        margin-top: 1rem;
+    }
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

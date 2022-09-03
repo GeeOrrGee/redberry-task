@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Label } from '../../shared/formContainerWrappers/formContainerWrappers';
+import { ReactComponent as ErrorSvg } from '../../assets/addLaptop/ErrorSvg.svg';
 import {
     RadioButton,
     RadioContainer,
@@ -45,7 +46,10 @@ export const RadioButtons = ({
     };
     return (
         <RadioContainer>
-            <Label errorState={errorState}>{label}</Label>
+            <Label errorState={errorState}>
+                {label}
+                {label === 'მეხსიერების ტიპი' && errorState && <ErrorSvg />}
+            </Label>
             <RadioOptionsContainer>
                 {data.map(({ type, value }) => {
                     return (
