@@ -169,6 +169,7 @@ export const LaptopInfo = ({
                     content={'მხოლოდ ციფრები'}
                     placeholder='14'
                     type='number'
+                    min='0'
                     name='laptop_cpu_cores'
                     value={laptopFormObject.laptop_cpu_cores}
                     onChange={onChangeHandler}
@@ -176,6 +177,7 @@ export const LaptopInfo = ({
                 />
                 <FormInput
                     type='number'
+                    min='0'
                     label='CPU-ს ნაკადი'
                     content={'მხოლოდ ციფრები'}
                     name='laptop_cpu_threads'
@@ -194,6 +196,7 @@ export const LaptopInfo = ({
                     name='laptop_ram'
                     value={laptopFormObject.laptop_ram}
                     onChange={onChangeHandler}
+                    min='0'
                     errorState={formErrors.includes('laptop_ram')}
                 />
 
@@ -218,6 +221,7 @@ export const LaptopInfo = ({
                 />
                 <FormInput
                     type='number'
+                    min='0'
                     label={'ლეპტოპის ფასი'}
                     content='ლეპტოპის ფასი'
                     placeholder='0000'

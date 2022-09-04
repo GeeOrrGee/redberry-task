@@ -9,11 +9,9 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
 export const SuccessModal = () => {
-    const localStorageClear = () => {
+    useEffect(() => {
         localStorage.clear();
-
-        return;
-    };
+    }, []);
     return (
         <>
             <Backdrop />{' '}
@@ -26,12 +24,10 @@ export const SuccessModal = () => {
                     <h2>ჩანაწერი დამატებულია!</h2>
                 </SuccessMessageContainer>
                 <LinksContainer>
-                    <Link onClick={localStorageClear} to='/laptops'>
+                    <Link to='/laptops'>
                         <BlueButton>სიაში გადაყვანა</BlueButton>
                     </Link>
-                    <Link onClick={localStorageClear} to={'/'}>
-                        მთავარი
-                    </Link>
+                    <Link to={'/'}>მთავარი</Link>
                 </LinksContainer>
             </SuccessModalContainer>
             ;
