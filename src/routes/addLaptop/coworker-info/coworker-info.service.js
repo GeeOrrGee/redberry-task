@@ -123,7 +123,7 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
                     position_id: id,
                 })
             );
-            // setActiveTeamId(team_id);
+
             dispatch(createAction(coworkerTypes.SET_ACTIVE_TEAM_ID, team_id));
             if (!teamsCurrData.length) {
                 axios('https://pcfy.redberryinternship.ge/api/teams').then(

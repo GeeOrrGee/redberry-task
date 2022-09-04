@@ -1,67 +1,86 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { Loader, LoaderContainer } from '../../../shared/loader/loader.styles';
 
 import {
     LaptopContainer,
     LaptopsListContainer,
     LaptopTextContainer,
+    NoLaptopsContainer,
 } from './laptops-list.style';
 
 export const LaptopsList = () => {
     const [fetchedData, setFetechedData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const handleRedirect = () => navigate('/add-laptop/coworker-info');
     useEffect(() => {
-        if (!fetchedData.length) {
+        (async () => {
             try {
-                axios(
-                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'d7aa0f4140e9ce11f81c9622c4d84673'}`
-                ).then(({ data: { data } }) => {
-                    setFetechedData(data);
-                });
+                setLoading(true);
+                const {
+                    data: { data },
+                } = await axios(
+                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'50dcd22954afc48fb27baea0666d845c'}`
+                );
+                setFetechedData(data);
+                setLoading(false);
             } catch (err) {
-                alert(err);
-                throw new Error();
+                setLoading(false);
+                alert(err.message);
             }
-        }
-    }, [fetchedData]);
+        })();
+    }, []);
 
     return (
         <>
-            {!fetchedData.length ? (
+            {loading ? (
                 <LoaderContainer>
                     <Loader />
                 </LoaderContainer>
             ) : (
                 <>
                     <h1>ჩანაწერების სია</h1>
-                    <LaptopsListContainer>
-                        {fetchedData.map((laptop) => {
-                            const {
-                                user,
-                                laptop: { name, id, image },
-                            } = laptop;
-                            return (
-                                <LaptopContainer>
-                                    <div>
-                                        <img
-                                            src={`https://pcfy.redberryinternship.ge/${image}`}
-                                            alt={laptop.name}
-                                        />
-                                    </div>
-                                    <LaptopTextContainer>
-                                        <div>
-                                            <span>{`${user.name} ${user.surname}`}</span>
-                                            <span>{name}</span>
-                                        </div>
-                                        <Link to={`/laptops/${id}`}>
-                                            მეტის ნახვა
-                                        </Link>
-                                    </LaptopTextContainer>
-                                </LaptopContainer>
-                            );
-                        })}
-                    </LaptopsListContainer>
+                    {fetchedData.length ? (
+                        <>
+                            <LaptopsListContainer>
+                                {fetchedData.map((laptop) => {
+                                    const {
+                                        user,
+                                        laptop: { name, id, image },
+                                    } = laptop;
+                                    return (
+                                        <LaptopContainer key={id}>
+                                            <div>
+                                                <img
+                                                    src={`https://pcfy.redberryinternship.ge/${image}`}
+                                                    alt={laptop.name}
+                                                />
+                                            </div>
+                                            <LaptopTextContainer>
+                                                <div>
+                                                    <span>{`${user.name} ${user.surname}`}</span>
+                                                    <span>{name}</span>
+                                                </div>
+                                                <Link to={`/laptops/${id}`}>
+                                                    მეტის ნახვა
+                                                </Link>
+                                            </LaptopTextContainer>
+                                        </LaptopContainer>
+                                    );
+                                })}
+                            </LaptopsListContainer>
+                        </>
+                    ) : (
+                        <NoLaptopsContainer>
+                            <p>ჩანაწერები არ არის</p>
+                            <BlueButton onClick={handleRedirect}>
+                                ჩანაწერის დამატება
+                            </BlueButton>
+                        </NoLaptopsContainer>
+                    )}
                 </>
             )}
         </>

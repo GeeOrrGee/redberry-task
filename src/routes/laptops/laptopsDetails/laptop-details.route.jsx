@@ -27,7 +27,7 @@ export const LaptopDetails = () => {
                     const {
                         data: { data },
                     } = await axios(
-                        `https://pcfy.redberryinternship.ge/api/laptop/${id}?token=d7aa0f4140e9ce11f81c9622c4d84673`
+                        `https://pcfy.redberryinternship.ge/api/laptop/${id}?token=50dcd22954afc48fb27baea0666d845c`
                     );
                     const responseBrand = await axios(
                         `https://pcfy.redberryinternship.ge/api/brands`
@@ -100,8 +100,7 @@ export const LaptopDetails = () => {
 
                     setFetchedData({ user, laptop, extra, image });
                 } catch (err) {
-                    alert(err);
-                    throw new Error();
+                    throw new Error(err);
                 }
             };
             fetchData();
@@ -129,7 +128,7 @@ export const LaptopDetails = () => {
                             <InfoListContainer>
                                 {Object.keys(user).map((key) => {
                                     return (
-                                        <InfoListItem>
+                                        <InfoListItem key={key}>
                                             <span>{key}:</span>
                                             <span>{user[key]}</span>
                                         </InfoListItem>
@@ -141,7 +140,7 @@ export const LaptopDetails = () => {
                         <InfoListContainer>
                             {Object.keys(laptop).map((key) => {
                                 return (
-                                    <InfoListItem>
+                                    <InfoListItem key={key}>
                                         <span>{key}:</span>
                                         <span>{laptop[key]}</span>
                                     </InfoListItem>
@@ -152,7 +151,7 @@ export const LaptopDetails = () => {
                         <InfoListContainer>
                             {Object.keys(extra).map((key) => {
                                 return (
-                                    <InfoListItem>
+                                    <InfoListItem key={key}>
                                         <span>{key}:</span>
                                         <span>{extra[key]}</span>
                                     </InfoListItem>

@@ -33,12 +33,11 @@ export const AddLaptop = () => {
         const postRequest = async () => {
             try {
                 const fd = new FormData();
-
                 Object.keys(mainDataObject).forEach((key) => {
                     fd.append(key, mainDataObject[key]);
                 });
 
-                fd.append('token', 'd7aa0f4140e9ce11f81c9622c4d84673');
+                fd.append('token', '50dcd22954afc48fb27baea0666d845c');
                 await axios.postForm(
                     'https://pcfy.redberryinternship.ge/api/laptop/create',
                     fd
@@ -46,8 +45,7 @@ export const AddLaptop = () => {
                 setLoadingState(false);
                 setSendData(true);
             } catch (err) {
-                alert(err);
-                throw new Error();
+                throw new Error(err);
             }
         };
         if (loadingState) {

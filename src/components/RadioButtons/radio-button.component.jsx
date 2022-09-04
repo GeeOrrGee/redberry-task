@@ -53,6 +53,7 @@ export const RadioButtons = ({
                 {data.map(({ type, value }) => {
                     return (
                         <RadioOption
+                            key={type}
                             onClick={(e) => onRadioClickHandler(value)}
                         >
                             <RadioButton active={value === currentActive} />

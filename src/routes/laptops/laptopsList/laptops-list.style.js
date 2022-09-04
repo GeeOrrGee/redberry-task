@@ -54,6 +54,26 @@ export const LaptopContainer = styled.div`
     }
 `;
 
+export const NoLaptopsContainer = styled.figure`
+    width: 80vw;
+    max-width: 37rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 3rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    p {
+        font-size: clamp(1.4rem, 1.4vw, 2.2rem);
+    }
+    button {
+        transition: 0.2s all;
+    }
+`;
+
 export const LaptopsListContainer = styled.figure`
     width: 100vw;
     height: 73vh;
