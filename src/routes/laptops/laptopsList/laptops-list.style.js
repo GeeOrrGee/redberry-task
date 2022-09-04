@@ -5,13 +5,10 @@ export const LaptopTextContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* align-items: center; */
-    /* margin-inline: 2rem; */
     height: 80%;
     font-size: clamp(1.2rem, 0.8vw, 2rem);
     div {
         color: #2e2e2e;
-        /* letter-spacing: 0.1rem; */
         span:first-child {
             font-weight: 600;
         }
@@ -27,7 +24,7 @@ export const LaptopTextContainer = styled.div`
 export const LaptopContainer = styled.div`
     display: flex;
     width: 100%;
-    max-width: 45rem;
+    max-width: 55rem;
     height: 16vh;
     justify-content: space-between;
     align-items: center;
@@ -61,6 +58,7 @@ export const LaptopsListContainer = styled.figure`
     width: 100vw;
     height: 73vh;
     overflow-y: scroll;
+
     max-width: 110rem;
     display: grid;
     grid-template-columns: 1fr 1fr;

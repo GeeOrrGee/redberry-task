@@ -14,7 +14,6 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
             localStorage.getItem('coworker-state')
         );
         if (persistedState) {
-            console.log(persistedState);
             dispatch(
                 createAction(coworkerTypes.REHYDRATE_STATE, persistedState)
             );
@@ -77,7 +76,6 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
                 })
             );
             if (activeTeamId) {
-                console.log('ss');
                 const filteredPositions = data.filter(
                     (position) =>
                         activeTeamId && position.team_id === activeTeamId
@@ -145,7 +143,7 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
                 const [autoSelectTeam] = teamsCurrData.filter(
                     (obj) => obj.id === team_id
                 );
-                console.log(name);
+
                 dispatch(
                     createAction(coworkerTypes.SET_ACTIVE_NAMES, {
                         teams: autoSelectTeam.name,
@@ -181,7 +179,6 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
 
         const errorArray = fields.filter((field) => {
             const value = userObject[field];
-            console.log(field, !value);
             if (!value) return !value;
 
             if (field === 'name' || field === 'surname') {
@@ -206,7 +203,7 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
                 const georgianNumber = value.slice(0, 5) === '+9955';
                 const validLength = value.substring(4).length === 9;
                 const validInput = georgianNumber && validLength && !notNumber;
-                console.log(validInput);
+
                 return !validInput;
             }
 
@@ -219,13 +216,13 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
     const onSubmitHandler = (e) => {
         e.preventDefault();
         const invalidFieldsArray = formValidation();
-        console.log(invalidFieldsArray);
         if (invalidFieldsArray.length) {
             dispatch(
                 createAction(coworkerTypes.SET_FORM_ERRORS, invalidFieldsArray)
             );
             return;
         }
+
         setMainDataObject({ ...mainDataObject, ...userObject });
         handleNextRoute();
 

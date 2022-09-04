@@ -30,7 +30,6 @@ export const LaptopService = (
                 createAction(laptopInfoTypes.REHYDRATE_STATE, persistedState)
             );
         }
-        console.log(persistedState);
     }, []);
 
     useEffect(() => {
@@ -235,14 +234,14 @@ export const LaptopService = (
                 return false;
             } else if (field === 'laptop_purchase_date') {
                 const correctDate = value.match(
-                    /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
+                    /^(0?[1-9]|[12][0-9]|3[01])[\\-](0?[1-9]|1[012])[\\-]\d{4}$/
                 );
                 return !correctDate;
             }
             if (!value) return !value;
             if (field === 'laptop_name') {
                 const containsCorrectCharacters = value.match(
-                    /^[~`!@#$%^&*()_+=[\]\\{}|;':",.\/<>?a-zA-Z0-9-]+$/
+                    /^[~`!@#$%^&*()_+=[\]\\{}|;':",./<>?a-zA-Z0-9-]+$/
                 );
                 return !containsCorrectCharacters;
             }

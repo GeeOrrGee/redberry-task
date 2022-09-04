@@ -12,11 +12,16 @@ export const SelectedImgFooter = styled.div`
     }
     div {
         display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 1rem;
-        p {
+        span {
             width: 100%;
-            max-width: 22rem;
-            overflow-x: scroll;
+            max-width: 30rem;
+            word-wrap: break-word;
+            padding: 0 !important;
+            /* overflow-x: scroll; */
+            overflow: hidden;
             font-size: clamp(1rem, 1vw, 1.6rem);
             @media (max-width: 50em) {
                 max-width: 15rem;

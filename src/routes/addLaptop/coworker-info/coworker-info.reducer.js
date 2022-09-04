@@ -31,7 +31,6 @@ export const defaultState = {
 
 export const coworkerReducer = (state = defaultState, action) => {
     const { type, payload } = action;
-    console.log(payload);
     switch (type) {
         case coworkerTypes.SET_USER_OBJECT:
             return { ...state, userObject: payload };

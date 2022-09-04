@@ -30,13 +30,21 @@ export const RouteButtonsContainer = styled.div`
         max-width: 22rem;
         width: 100%;
         margin-left: auto;
-        /* display: flex;
-        justify-content: center;
-        align-items: center; */
         button {
             width: 100%;
             font-size: clamp(1.2rem, 1vw, 2rem);
         }
+    }
+`;
+
+export const ThinLine = styled.div`
+    width: 100%;
+    height: 1px;
+    background-color: grey;
+    opacity: 0.6;
+    margin-block: 4.5rem;
+    @media (max-width: 50em) {
+        margin-block: 3.2rem;
     }
 `;
 

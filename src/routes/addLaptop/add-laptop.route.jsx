@@ -33,17 +33,18 @@ export const AddLaptop = () => {
         const postRequest = async () => {
             try {
                 const fd = new FormData();
+
                 Object.keys(mainDataObject).forEach((key) => {
                     fd.append(key, mainDataObject[key]);
                 });
+
                 fd.append('token', 'd7aa0f4140e9ce11f81c9622c4d84673');
-                const response = await axios.postForm(
+                await axios.postForm(
                     'https://pcfy.redberryinternship.ge/api/laptop/create',
                     fd
                 );
                 setLoadingState(false);
                 setSendData(true);
-                console.log(response);
             } catch (err) {
                 alert(err);
                 throw new Error();
@@ -61,7 +62,6 @@ export const AddLaptop = () => {
                 persistedSendDataState: sendData,
             };
 
-            console.log(persistedObjConfig);
             localStorage.setItem(
                 'add-laptop-state',
                 JSON.stringify(persistedObjConfig)
@@ -76,7 +76,6 @@ export const AddLaptop = () => {
             const getCurrentWidth = window.innerWidth;
             if (getCurrentWidth < 801) {
                 setMobileState(true);
-                console.log(getCurrentWidth, mobileState);
             } else if (getCurrentWidth > 800) {
                 setMobileState(false);
             }

@@ -23,7 +23,6 @@ export const RadioButtons = ({
         );
 
         if (persistedState) {
-            // const { name } = persistedState;
             setCurrentActive(persistedState);
             return;
         }

@@ -4,7 +4,7 @@ export const InputField = styled.input`
     width: 100%;
     width: ${({ wide }) => (wide === 'mid' ? 'width:80%' : 'width:100%')};
     padding: 1.5rem 1.4rem;
-
+    font-size: clamp(1rem, 1.2vw, 1.4rem);
     border-radius: 5px;
     border: 2px solid var(--light-blue-outline);
     transition: all 0.1s ease-in;

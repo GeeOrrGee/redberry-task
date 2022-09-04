@@ -13,6 +13,26 @@ export const GlobalStyle = styled.createGlobalStyle`
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: rgb(0, 0, 0, 0.2);
+            transition: 0.1s all ease-in;
+            border-radius: 30px;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: rgb(0, 0, 0, 0.3);
+        }
     }
 
     html {

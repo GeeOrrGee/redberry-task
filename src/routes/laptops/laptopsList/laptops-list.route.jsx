@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Loader, LoaderContainer } from '../../../shared/loader/loader.styles';
 
 import {
@@ -11,19 +11,20 @@ import {
 
 export const LaptopsList = () => {
     const [fetchedData, setFetechedData] = useState([]);
-    const navigate = useNavigate();
     useEffect(() => {
         if (!fetchedData.length) {
-            axios(
-                `https://pcfy.redberryinternship.ge/api/laptops?token=${'d7aa0f4140e9ce11f81c9622c4d84673'}`
-            ).then(({ data: { data } }) => {
-                console.log(data);
-                setFetechedData(data);
-            });
+            try {
+                axios(
+                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'d7aa0f4140e9ce11f81c9622c4d84673'}`
+                ).then(({ data: { data } }) => {
+                    setFetechedData(data);
+                });
+            } catch (err) {
+                alert(err);
+                throw new Error();
+            }
         }
     }, [fetchedData]);
-
-    const prevRouteHandler = () => navigate(-1);
 
     return (
         <>

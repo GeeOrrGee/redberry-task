@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { InputLabelWrapper, InputField } from './input-field.styles';
 import { Label } from '../../shared/formContainerWrappers/formContainerWrappers';
 

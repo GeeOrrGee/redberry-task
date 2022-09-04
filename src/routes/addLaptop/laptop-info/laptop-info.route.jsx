@@ -53,8 +53,8 @@ export const LaptopInfo = ({
     } = LaptopService(
         didMountRef,
         imageInputRef,
-        setMainDataObject,
         setLoadingState,
+        setMainDataObject,
         mainDataObject
     );
     const {
@@ -127,7 +127,7 @@ export const LaptopInfo = ({
                 <SelectedImgFooter>
                     <div>
                         <Check />
-                        <p>{laptopFormObject.laptop_image.name}</p>
+                        <span>{laptopFormObject.laptop_image.name}</span>
                     </div>
                     <BlueButton type='button' onClick={removeImgHandler}>
                         თავიდან ატვირთე

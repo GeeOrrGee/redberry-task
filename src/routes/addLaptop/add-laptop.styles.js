@@ -43,7 +43,7 @@ export const NavlinksContainer = styled.header`
     a {
         text-decoration: none;
         color: #232323;
-        font-size: clamp(1.4rem, 1.2vw, 2rem);
+        font-size: clamp(1.2rem, 1.2vw, 2rem);
         font-weight: 700;
         cursor: pointer;
         display: inline-block;
@@ -84,7 +84,7 @@ export const NavlinksContainer = styled.header`
         font-weight: 700;
     }
     @media (max-width: 50em) {
-        padding-top: 2rem;
+        padding-top: 3rem;
         a {
             display: none;
             &.active-inner-navlink {
