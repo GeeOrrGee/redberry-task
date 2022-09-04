@@ -85,6 +85,7 @@ export const LaptopsListContainer = styled.figure`
     padding-inline: 1rem;
     gap: 3rem;
     place-items: center;
+    place-content: flex-start;
     margin-top: 3rem;
     @media (max-width: 40em) {
         grid-template-columns: 1fr;

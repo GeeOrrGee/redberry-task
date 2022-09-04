@@ -20,6 +20,7 @@ export const LaptopsList = () => {
         (async () => {
             try {
                 setLoading(true);
+
                 const {
                     data: { data },
                 } = await axios(

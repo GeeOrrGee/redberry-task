@@ -38,10 +38,11 @@ export const AddLaptop = () => {
                 });
 
                 fd.append('token', '50dcd22954afc48fb27baea0666d845c');
-                await axios.postForm(
+                const sd = await axios.postForm(
                     'https://pcfy.redberryinternship.ge/api/laptop/create',
                     fd
                 );
+                console.log(sd);
                 setLoadingState(false);
                 setSendData(true);
             } catch (err) {
