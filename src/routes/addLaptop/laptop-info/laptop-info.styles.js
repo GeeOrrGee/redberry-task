@@ -20,7 +20,6 @@ export const SelectedImgFooter = styled.div`
             max-width: 30rem;
             word-wrap: break-word;
             padding: 0 !important;
-            /* overflow-x: scroll; */
             overflow: hidden;
             font-size: clamp(1rem, 1vw, 1.6rem);
             @media (max-width: 50em) {
@@ -67,21 +66,12 @@ export const DropzoneTextContainer = styled.div`
 export const ImageInput = styled.input`
     width: 100%;
     height: 100%;
-    /* display: none; */
     opacity: 0;
-    /* position: absolute; */
 `;
 
 export const ImageDropInputContainer = styled.label`
     width: 100%;
-    /* max-width: 65rem; */
-
     height: 40vh;
-
-    /* background-image: ${({ backgroundUrl }) =>
-        backgroundUrl && `url(${backgroundUrl})`};
-    background-size: cover;
-    background-repeat: no-repeat; */
     width: 100%;
     img {
         position: absolute;
@@ -90,8 +80,6 @@ export const ImageDropInputContainer = styled.label`
         border-radius: 8px;
         top: -1%;
     }
-
-    /* overflow: hidden; */
 
     max-height: 40rem;
     background-color: var(--greysh-background);

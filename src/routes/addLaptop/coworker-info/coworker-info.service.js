@@ -9,6 +9,8 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
     const navigate = useNavigate();
     const [state, dispatch] = useReducer(coworkerReducer, defaultState);
     const didMountRef = useRef(false);
+
+    // localStorage logic
     useEffect(() => {
         const persistedState = JSON.parse(
             localStorage.getItem('coworker-state')
@@ -48,6 +50,9 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
     const handleNextRoute = () => {
         navigate('/add-laptop/laptop-specs');
     };
+
+    //////////////////////////////////////////
+    ////////////dropdown logic////////////////
 
     const handleTeamsDropdown = async () => {
         if (!fetchedData.teams.length) {
@@ -173,7 +178,28 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
         }
     };
 
-    // validates each form input cases and returns formError array as an error buffer array
+    const handleInputChange = (e) => {
+        const inputType = e.target.name;
+        const value =
+            inputType === 'phone_number'
+                ? e.target.value.trim()
+                : e.target.value;
+        dispatch(
+            createAction(coworkerTypes.SET_USER_OBJECT, {
+                ...userObject,
+                [inputType]: value,
+            })
+        );
+        if (formErrors.includes(inputType)) {
+            dispatch(
+                createAction(
+                    coworkerTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== inputType)
+                )
+            );
+        }
+    };
+    // validates each form input cases and returns formError array as an error buffer
     const formValidation = () => {
         const fields = Object.keys(userObject);
 
@@ -193,7 +219,7 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
                 const lastPart = value.substring(value.length - 12);
                 const validEmail =
                     lastPart === '@redberry.ge' &&
-                    value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/); //prevents multiple @ symbols
+                    value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
                 return !validEmail;
             }
@@ -225,30 +251,6 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
 
         setMainDataObject({ ...mainDataObject, ...userObject });
         handleNextRoute();
-
-        //post request
-    };
-
-    const handleInputChange = (e) => {
-        const inputType = e.target.name;
-        const value =
-            inputType === 'phone_number'
-                ? e.target.value.trim()
-                : e.target.value;
-        dispatch(
-            createAction(coworkerTypes.SET_USER_OBJECT, {
-                ...userObject,
-                [inputType]: value,
-            })
-        );
-        if (formErrors.includes(inputType)) {
-            dispatch(
-                createAction(
-                    coworkerTypes.SET_FORM_ERRORS,
-                    formErrors.filter((err) => err !== inputType)
-                )
-            );
-        }
     };
 
     return {

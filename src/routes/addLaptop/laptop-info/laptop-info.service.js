@@ -20,6 +20,8 @@ export const LaptopService = (
         fetchedData,
     } = state;
 
+    //localStorage logic
+
     useEffect(() => {
         const persistedState = JSON.parse(
             localStorage.getItem('laptop-info-state')
@@ -49,6 +51,9 @@ export const LaptopService = (
         didMountRef.current = true;
     }, [laptopFormObject, state, didMountRef]);
 
+    /////////////////////////////////////////////
+
+    //image drop handler logic
     const dragHandler = (e) => {
         e.stopPropagation();
 
@@ -98,6 +103,9 @@ export const LaptopService = (
             createAction(laptopInfoTypes.SET_IMAGE_INPUT_DRAG_ENTER, false)
         );
     };
+
+    ////////////////////////////////////////////////////
+    //////////////////Dropdown Logic //////////////////
 
     const onBrandsDropdownHandler = async () => {
         if (fetchedData.brands?.length) return;
@@ -195,6 +203,8 @@ export const LaptopService = (
             })
         );
     };
+    ////////////////////////////////////////////////////
+    //////////////////Input(type text/num) onChange  Logic //////////////////
 
     const onChangeHandler = (e) => {
         const inputType = e.target.name;
@@ -224,6 +234,10 @@ export const LaptopService = (
             })
         );
     };
+
+    ///////////////////////////////////////////////////////
+    //////////////////Form Errors Buffer //////////////////
+    //returns an array of input names which didn't pass the validation
 
     const formValidation = () => {
         const fields = Object.keys(laptopFormObject);
