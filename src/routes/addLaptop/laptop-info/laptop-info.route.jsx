@@ -230,7 +230,7 @@ export const LaptopInfo = ({
                     InputSymbol={GELsymbol}
                     value={laptopFormObject.laptop_price}
                     onChange={onChangeHandler}
-                    errorState={formErrors.includes('laptop_name')}
+                    errorState={formErrors.includes('laptop_price')}
                 />
             </MultipleInputContainer>
 

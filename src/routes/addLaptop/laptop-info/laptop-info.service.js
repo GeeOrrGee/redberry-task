@@ -255,6 +255,7 @@ export const LaptopService = (
 
                 return !correctDate;
             }
+            console.log(field, value);
             if (!value) return !value;
             if (field === 'laptop_name') {
                 const containsCorrectCharacters = value.match(
