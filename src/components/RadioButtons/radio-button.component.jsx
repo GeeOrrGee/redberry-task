@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Label } from '../../shared/formContainerWrappers/formContainerWrappers';
 import { ReactComponent as ErrorSvg } from '../../assets/addLaptop/ErrorSvg.svg';
 import {
@@ -15,29 +15,25 @@ export const RadioButtons = ({
     callbackHandler,
     name,
 }) => {
-    const didMountRef = useRef(false);
     const [currentActive, setCurrentActive] = useState('');
     useEffect(() => {
         const persistedState = JSON.parse(
-            localStorage.getItem('radio-btn-state')
+            localStorage.getItem(`radio-btn-state-${label}`)
         );
-
-        if (persistedState) {
+        if (persistedState && !currentActive) {
             setCurrentActive(persistedState);
             return;
         }
-    }, []);
+    }, [currentActive, label]);
 
     useEffect(() => {
-        if (didMountRef.current) {
+        if (currentActive) {
             localStorage.setItem(
-                'radio-btn-state',
+                `radio-btn-state-${label}`,
                 JSON.stringify(currentActive)
             );
         }
-
-        didMountRef.current = true;
-    }, [currentActive]);
+    }, [label, currentActive]);
 
     const onRadioClickHandler = (btnValue) => {
         setCurrentActive(btnValue);
@@ -47,7 +43,7 @@ export const RadioButtons = ({
         <RadioContainer>
             <Label errorState={errorState}>
                 {label}
-                {label === 'მეხსიერების ტიპი' && errorState && <ErrorSvg />}
+                {errorState && <ErrorSvg />}
             </Label>
             <RadioOptionsContainer>
                 {data.map(({ type, value }) => {

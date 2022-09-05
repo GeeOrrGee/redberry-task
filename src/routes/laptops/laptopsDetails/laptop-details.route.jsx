@@ -10,7 +10,7 @@ import {
     InfoListItem,
     TwoSidesContainer,
 } from './laptop-details.styles';
-
+import { ReactComponent as GELSymbol } from '../../../assets/addLaptop/GEL.svg';
 export const LaptopDetails = () => {
     const defaultState = {
         user: {},
@@ -27,7 +27,7 @@ export const LaptopDetails = () => {
                     const {
                         data: { data },
                     } = await axios(
-                        `https://pcfy.redberryinternship.ge/api/laptop/${id}?token=50dcd22954afc48fb27baea0666d845c`
+                        `https://pcfy.redberryinternship.ge/api/laptop/${id}?token=0f90a3c3ac54034b3e3675b2a4160ed7`
                     );
                     const responseBrand = await axios(
                         `https://pcfy.redberryinternship.ge/api/brands`
@@ -70,6 +70,7 @@ export const LaptopDetails = () => {
                         (teamObj) => teamObj.id === team_id
                     );
 
+                    // re-creating/modifying necessary objects to make them dynamic and iterable enough to use them in JSX
                     const user = {
                         სახელი: name,
                         გვარი: surname,
@@ -153,7 +154,14 @@ export const LaptopDetails = () => {
                                 return (
                                     <InfoListItem key={key}>
                                         <span>{key}:</span>
-                                        <span>{extra[key]}</span>
+                                        <span>
+                                            {extra[key]}
+                                            {key === 'ლეპტოპის ფასი' ? (
+                                                <GELSymbol />
+                                            ) : (
+                                                ''
+                                            )}
+                                        </span>
                                     </InfoListItem>
                                 );
                             })}

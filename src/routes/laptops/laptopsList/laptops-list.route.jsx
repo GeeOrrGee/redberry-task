@@ -20,11 +20,10 @@ export const LaptopsList = () => {
         (async () => {
             try {
                 setLoading(true);
-
                 const {
                     data: { data },
                 } = await axios(
-                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'50dcd22954afc48fb27baea0666d845c'}`
+                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'0f90a3c3ac54034b3e3675b2a4160ed7'}`
                 );
                 setFetechedData(data);
                 setLoading(false);

@@ -40,6 +40,17 @@ export const InputLabelWrapper = styled.div`
         color: var(--grey-font-color);
         content: '${({ content = '' }) => content}';
     }
+
+    svg {
+        position: absolute;
+        width: 1.5rem;
+        height: 1.5rem;
+        top: 61%;
+        right: 4%;
+        @media (max-width: 75em) {
+            top: 52%;
+        }
+    }
     ${({ content = '' }) =>
         content &&
         `

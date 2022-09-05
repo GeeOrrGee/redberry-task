@@ -36,10 +36,15 @@ export const RadioOptionsContainer = styled.div`
 
 export const RadioContainer = styled.figure`
     svg {
-        width: 2.2rem;
-        height: 2.2rem;
+        width: 2.4rem;
+        height: 2.4rem;
         position: absolute;
-        transform: translate(55%, -18%);
+        transform: translate(55%, -10%);
+        @media (max-width: 50em) {
+            transform: translate(75%, -25%);
+            width: 2rem;
+            height: 2rem;
+        }
     }
     position: relative;
     display: flex;

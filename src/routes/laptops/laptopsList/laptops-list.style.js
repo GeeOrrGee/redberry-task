@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
 export const LaptopTextContainer = styled.div`
-    width: 80%;
+    width: 85%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 80%;
     font-size: clamp(1.2rem, 0.8vw, 2rem);
+    padding: 1rem;
     div {
         color: #2e2e2e;
         span:first-child {
@@ -31,13 +32,11 @@ export const LaptopContainer = styled.div`
     padding: 0.5rem;
     border-radius: 10px;
     gap: 1rem;
-
     border: 1px solid rgb(174, 209, 234);
     background-color: rgb(174, 209, 234, 0.2);
     max-height: 23rem;
     div:first-child {
         width: 90%;
-        /* max-width: 20rem; */
         height: 100%;
         img {
             width: 100%;
@@ -83,12 +82,13 @@ export const LaptopsListContainer = styled.figure`
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding-inline: 1rem;
-    gap: 3rem;
+    gap: 4rem;
     place-items: center;
     place-content: flex-start;
     margin-top: 3rem;
     @media (max-width: 40em) {
         grid-template-columns: 1fr;
         height: 100vh;
+        gap: 2rem;
     }
 `;

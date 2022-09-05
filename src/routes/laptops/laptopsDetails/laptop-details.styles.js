@@ -20,6 +20,19 @@ export const InfoListItem = styled.li`
         color: #2e2e2e;
         font-weight: 700;
         width: 50%;
+
+        svg {
+            align-self: center;
+            margin-top: 0.2rem;
+            margin-left: 0.5rem;
+            padding-top: 0.1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            @media (max-width: 50em) {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+        }
         &:last-child {
             color: grey;
         }

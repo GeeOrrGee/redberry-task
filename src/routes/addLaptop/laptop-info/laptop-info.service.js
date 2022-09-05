@@ -244,12 +244,15 @@ export const LaptopService = (
 
         const errorsArray = fields.filter((field) => {
             const value = laptopFormObject[field];
+            console.log(value);
             if (field === 'laptop_purchase_date' && !value) {
                 return false;
             } else if (field === 'laptop_purchase_date') {
                 const correctDate = value.match(
-                    /^(0?[1-9]|[12][0-9]|3[01])[\\-](0?[1-9]|1[012])[\\-]\d{4}$/
+                    // /^(0?[1-9]|[12][0-9]|3[01])[\\-](0?[1-9]|1[012])[\\-]\d{4}$/
+                    /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i
                 );
+
                 return !correctDate;
             }
             if (!value) return !value;

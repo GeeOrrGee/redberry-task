@@ -1,5 +1,6 @@
 import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
+import { ReactComponent as GELsymbol } from '../../../assets/addLaptop/GEL.svg';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { ReactComponent as Check } from '../../../assets/addLaptop/GreenCheck.svg';
 import { ReactComponent as ErrorSvg } from '../../../assets/addLaptop/ErrorSvg.svg';
@@ -226,6 +227,7 @@ export const LaptopInfo = ({
                     content='ლეპტოპის ფასი'
                     placeholder='0000'
                     name='laptop_price'
+                    InputSymbol={GELsymbol}
                     value={laptopFormObject.laptop_price}
                     onChange={onChangeHandler}
                     errorState={formErrors.includes('laptop_name')}
