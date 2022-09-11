@@ -10,7 +10,10 @@ export const formReducer = (state = defaultState, action = {}) => {
     const { type, payload } = action;
     switch (type) {
         case FormTypes.SET_MAIN_OBJECT:
-            return { ...state, mainObject: payload };
+            return {
+                ...state,
+                mainObject: { ...state.mainObject, ...payload },
+            };
         case FormTypes.SEND_POST_REQUEST:
             return { ...state, loadingState: true };
         case FormTypes.POST_REQUEST_SUCCESS:

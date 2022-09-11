@@ -11,14 +11,31 @@ import LaptopInfo from './laptop-info/laptop-info.route';
 import axios from 'axios';
 import { Loader, LoaderContainer } from '../../shared/loader/loader.styles';
 import { SuccessModal } from '../../components/SuccessModal/success-modal.component';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    selectFormLoading,
+    selectMainObject,
+    selectSentData,
+} from '../../store/Form/form.selectors';
+import {
+    onPostRequestSuccess,
+    sendPostRequest,
+    setMainObject,
+} from '../../store/Form/form-actions';
 export const AddLaptop = () => {
     const didMountRef = useRef(false);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [mobileState, setMobileState] = useState(false);
-    const [mainDataObject, setMainDataObject] = useState(''); //
-    const [sendData, setSendData] = useState(false); //
-    const [loadingState, setLoadingState] = useState(false);
     const [counter, setCounter] = useState('');
+
+    //selectors
+    const sentData = useSelector(selectSentData);
+    const mainObject = useSelector(selectMainObject);
+    const loadingState = useSelector(selectFormLoading);
+    //dispatch callbacks
+    const sendRequest = () => dispatch(sendPostRequest());
+    const setMainData = (data) => dispatch(setMainObject(data));
 
     const currUrl = window.location.pathname;
     useEffect(() => {
@@ -29,46 +46,25 @@ export const AddLaptop = () => {
         setCounter(currentStep);
     }, [currUrl]);
 
-    useEffect(() => {
-        const postRequest = async () => {
-            try {
-                const fd = new FormData();
+    // useEffect(() => {
+    //     if (loadingState) {
+    //         dispatch(sendPostRequest());
+    //     }
+    // }, [mainDataObject, loadingState, dispatch]);
 
-                Object.keys(mainDataObject).forEach((key) => {
-                    fd.append(key, mainDataObject[key]);
-                });
+    // useEffect(() => {
+    //     if (didMountRef.current && mainDataObject) {
+    //         const persistedObjConfig = {
+    //             persistedMainDataObject: mainDataObject,
+    //         };
 
-                fd.append('token', '0f90a3c3ac54034b3e3675b2a4160ed7');
-                const sd = await axios.postForm(
-                    'https://pcfy.redberryinternship.ge/api/laptop/create',
-                    fd
-                );
-                console.log(sd);
-                setLoadingState(false);
-                setSendData(true);
-            } catch (err) {
-                throw new Error(err);
-            }
-        };
-        if (loadingState) {
-            postRequest();
-        }
-    }, [mainDataObject, loadingState]);
-
-    useEffect(() => {
-        if (didMountRef.current && mainDataObject) {
-            const persistedObjConfig = {
-                persistedMainDataObject: mainDataObject,
-                persistedSendDataState: sendData,
-            };
-
-            localStorage.setItem(
-                'add-laptop-state',
-                JSON.stringify(persistedObjConfig)
-            );
-        }
-        didMountRef.current = true;
-    }, [sendData, loadingState, mainDataObject]);
+    //         localStorage.setItem(
+    //             'add-laptop-state',
+    //             JSON.stringify(persistedObjConfig)
+    //         );
+    //     }
+    //     didMountRef.current = true;
+    // }, [loadingState, mainDataObject]);
 
     //handling mobile navigation side effects
     useEffect(() => {
@@ -88,18 +84,16 @@ export const AddLaptop = () => {
         return window.removeEventListener('resize', () => renderRedberryLogo());
     }, [mobileState]);
 
-    useEffect(() => {
-        const savedProgress = JSON.parse(
-            localStorage.getItem('add-laptop-state')
-        );
-        if (savedProgress) {
-            const { persistedMainDataObject, persistedSendDataState } =
-                savedProgress;
+    // useEffect(() => {
+    //     const savedProgress = JSON.parse(
+    //         localStorage.getItem('add-laptop-state')
+    //     );
+    //     if (savedProgress) {
+    //         const { persistedMainDataObject } = savedProgress;
 
-            setSendData(persistedSendDataState);
-            setMainDataObject(persistedMainDataObject);
-        }
-    }, [navigate]);
+    //         setMainDataObject(persistedMainDataObject);
+    //     }
+    // }, [navigate]);
 
     const prevRoute = () => navigate(-1);
     return (
@@ -111,7 +105,7 @@ export const AddLaptop = () => {
             )}
 
             <AddLaptopContainer>
-                {!sendData ? (
+                {!sentData ? (
                     <>
                         {' '}
                         {
@@ -143,8 +137,7 @@ export const AddLaptop = () => {
                                 path='/coworker-info'
                                 element={
                                     <CoworkerInfo
-                                        mainDataObject={mainDataObject}
-                                        setMainDataObject={setMainDataObject}
+                                        setMainData={setMainData}
                                     />
                                 }
                             />
@@ -152,10 +145,8 @@ export const AddLaptop = () => {
                                 path='/laptop-specs'
                                 element={
                                     <LaptopInfo
-                                        mainDataObject={mainDataObject}
-                                        setMainDataObject={setMainDataObject}
-                                        setSendData={setSendData}
-                                        setLoadingState={setLoadingState}
+                                        setMainData={setMainData}
+                                        sendRequest={sendRequest}
                                         mobileState={mobileState}
                                     />
                                 }

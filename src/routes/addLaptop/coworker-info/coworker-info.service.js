@@ -5,7 +5,7 @@ import coworkerTypes from './coworker-info-actionTypes';
 import coworkerReducer from './coworker-info.reducer';
 import { defaultState } from './coworker-info.reducer';
 import axios from 'axios';
-export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
+export const CoworkerInfoService = (setMainData) => {
     const navigate = useNavigate();
     const [state, dispatch] = useReducer(coworkerReducer, defaultState);
     const didMountRef = useRef(false);
@@ -249,7 +249,7 @@ export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
             return;
         }
 
-        setMainDataObject({ ...mainDataObject, ...userObject });
+        setMainData({ ...userObject });
         handleNextRoute();
     };
 

@@ -8,7 +8,7 @@ import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
 
 import { CoworkerInfoService } from './coworker-info.service.js';
-export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
+export const CoworkerInfo = ({ setMainData }) => {
     const {
         handleDropdownSelect,
         onSubmitHandler,
@@ -16,7 +16,7 @@ export const CoworkerInfo = ({ setMainDataObject, mainDataObject }) => {
         handlePositionsDropdown,
         handleTeamsDropdown,
         state,
-    } = CoworkerInfoService(setMainDataObject, mainDataObject);
+    } = CoworkerInfoService(setMainData);
 
     const {
         userObject,

@@ -23,7 +23,7 @@ export const LaptopsList = () => {
                 const {
                     data: { data },
                 } = await axios(
-                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'0f90a3c3ac54034b3e3675b2a4160ed7'}`
+                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'65c73ba7087323760a1a95ac1232f5fe'}`
                 );
                 console.log(data);
                 setFetechedData(data);
