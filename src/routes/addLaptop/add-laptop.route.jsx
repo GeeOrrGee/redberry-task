@@ -15,8 +15,8 @@ export const AddLaptop = () => {
     const didMountRef = useRef(false);
     const navigate = useNavigate();
     const [mobileState, setMobileState] = useState(false);
-    const [mainDataObject, setMainDataObject] = useState('');
-    const [sendData, setSendData] = useState(false);
+    const [mainDataObject, setMainDataObject] = useState(''); //
+    const [sendData, setSendData] = useState(false); //
     const [loadingState, setLoadingState] = useState(false);
     const [counter, setCounter] = useState('');
 
