@@ -31,7 +31,12 @@ const laptopCondition = [
     { type: 'მეორადი', value: 'used' },
 ];
 
-export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
+export const LaptopInfo = ({
+    mainDataObject,
+    setMainDataObject,
+    setLoadingState,
+    mobileState,
+}) => {
     const imageInputRef = useRef();
     const didMountRef = useRef(false);
     const {
@@ -46,7 +51,13 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
         addPhotoHandler,
         dragHandler,
         state,
-    } = LaptopService(didMountRef, imageInputRef, sendRequest, setMainData);
+    } = LaptopService(
+        didMountRef,
+        imageInputRef,
+        setLoadingState,
+        setMainDataObject,
+        mainDataObject
+    );
     const {
         activeNames,
         laptopFormObject,

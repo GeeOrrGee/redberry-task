@@ -1,48 +1,36 @@
 import { useEffect, useReducer, useRef } from 'react';
 import createAction from '../../../utils/action-creator';
 import { useNavigate } from 'react-router-dom';
+import coworkerTypes from './coworker-info-actionTypes';
+import coworkerReducer from './coworker-info.reducer';
+import { defaultState } from './coworker-info.reducer';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUserFormInfo } from '../../../store/Form/user-form/user-form.selectors';
-import {
-    setActiveNames,
-    setActiveTeamId,
-    setCurrentPositionsData,
-    setCurrentTeamsData,
-    setFetchedData,
-    setFormErrors,
-    setUserObject,
-} from '../../../store/Form/user-form/user-form.actions';
-export const CoworkerInfoService = (setMainData) => {
-    const dispatch = useDispatch();
+export const CoworkerInfoService = (setMainDataObject, mainDataObject) => {
     const navigate = useNavigate();
-    // const [state, dispatch] = useReducer(coworkerReducer, defaultState);
-    console.log(selectUserFormInfo());
-    const { userObject, formErrors, activeTeamId, fetchedData, teamsCurrData } =
-        useSelector(selectUserFormInfo());
+    const [state, dispatch] = useReducer(coworkerReducer, defaultState);
     const didMountRef = useRef(false);
 
     // localStorage logic
-    // useEffect(() => {
-    //     const persistedState = JSON.parse(
-    //         localStorage.getItem('coworker-state')
-    //     );
-    //     if (persistedState) {
-    //         dispatch(
-    //             createAction(coworkerTypes.REHYDRATE_STATE, persistedState)
-    //         );
-    //     }
-    // }, []);
+    useEffect(() => {
+        const persistedState = JSON.parse(
+            localStorage.getItem('coworker-state')
+        );
+        if (persistedState) {
+            dispatch(
+                createAction(coworkerTypes.REHYDRATE_STATE, persistedState)
+            );
+        }
+    }, []);
 
-    // useEffect(() => {
-    //     if (didMountRef.current) {
-    //         localStorage.setItem('coworker-state', JSON.stringify(state));
-    //     }
-    //     didMountRef.current = true;
-    // }, [state]);
+    useEffect(() => {
+        if (didMountRef.current) {
+            localStorage.setItem('coworker-state', JSON.stringify(state));
+        }
+        didMountRef.current = true;
+    }, [state]);
 
-    // const { userObject, formErrors, activeTeamId, fetchedData, teamsCurrData } =
-    //     state;
+    const { userObject, formErrors, activeTeamId, fetchedData, teamsCurrData } =
+        state;
 
     useEffect(() => {
         if (activeTeamId) {
@@ -50,9 +38,14 @@ export const CoworkerInfoService = (setMainData) => {
                 (obj) => obj.team_id === activeTeamId
             );
 
-            dispatch(setFetchedData(filteredPositions));
+            dispatch(
+                createAction(
+                    coworkerTypes.SET_CURR_POSITIONS_DATA,
+                    filteredPositions
+                )
+            );
         }
-    }, [activeTeamId, dispatch, fetchedData.positions]);
+    }, [activeTeamId, fetchedData]);
 
     const handleNextRoute = () => {
         navigate('/add-laptop/laptop-specs');
@@ -67,12 +60,12 @@ export const CoworkerInfoService = (setMainData) => {
                 data: { data },
             } = await axios('https://pcfy.redberryinternship.ge/api/teams');
             dispatch(
-                setFetchedData({
+                createAction(coworkerTypes.SET_FETCHED_DATA, {
                     ...fetchedData,
                     teams: data,
                 })
             );
-            dispatch(setCurrentTeamsData(data));
+            dispatch(createAction(coworkerTypes.SET_CURR_TEAMS_DATA, data));
         }
     };
 
@@ -82,7 +75,7 @@ export const CoworkerInfoService = (setMainData) => {
                 data: { data },
             } = await axios('https://pcfy.redberryinternship.ge/api/positions');
             dispatch(
-                setFetchedData({
+                createAction(coworkerTypes.SET_FETCHED_DATA, {
                     ...fetchedData,
                     positions: data,
                 })
@@ -92,10 +85,17 @@ export const CoworkerInfoService = (setMainData) => {
                     (position) =>
                         activeTeamId && position.team_id === activeTeamId
                 );
-                dispatch(setCurrentPositionsData(filteredPositions));
+                dispatch(
+                    createAction(
+                        coworkerTypes.SET_CURR_POSITIONS_DATA,
+                        filteredPositions
+                    )
+                );
                 return;
             } else {
-                dispatch(setCurrentPositionsData(data));
+                dispatch(
+                    createAction(coworkerTypes.SET_CURR_POSITIONS_DATA, data)
+                );
             }
         }
     };
@@ -103,14 +103,18 @@ export const CoworkerInfoService = (setMainData) => {
     const handleDropdownSelect = (dataObj) => {
         if (formErrors.includes('team_id')) {
             dispatch(
-                setFormErrors(formErrors.filter((err) => err !== 'team_id'))
+                createAction(
+                    coworkerTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== 'team_id')
+                )
             );
         }
         if (dataObj?.team_id) {
             const { team_id, id, name } = dataObj;
             if (formErrors.includes('position_id')) {
                 dispatch(
-                    setFormErrors(
+                    createAction(
+                        coworkerTypes.SET_FORM_ERRORS,
                         formErrors.filter(
                             (err) => err !== 'position_id' && err !== 'team_id'
                         )
@@ -118,14 +122,14 @@ export const CoworkerInfoService = (setMainData) => {
                 );
             }
             dispatch(
-                setUserObject({
+                createAction(coworkerTypes.SET_USER_OBJECT, {
                     ...userObject,
                     team_id,
                     position_id: id,
                 })
             );
 
-            dispatch(setActiveTeamId(team_id));
+            dispatch(createAction(coworkerTypes.SET_ACTIVE_TEAM_ID, team_id));
             if (!teamsCurrData.length) {
                 axios('https://pcfy.redberryinternship.ge/api/teams').then(
                     ({ data: { data } }) => {
@@ -133,7 +137,7 @@ export const CoworkerInfoService = (setMainData) => {
                             (obj) => obj.id === team_id
                         );
                         dispatch(
-                            setActiveNames({
+                            createAction(coworkerTypes.SET_ACTIVE_NAMES, {
                                 teams: autoSelectTeam.name,
                                 positions: name,
                             })
@@ -146,7 +150,7 @@ export const CoworkerInfoService = (setMainData) => {
                 );
 
                 dispatch(
-                    setActiveNames({
+                    createAction(coworkerTypes.SET_ACTIVE_NAMES, {
                         teams: autoSelectTeam.name,
                         positions: name,
                     })
@@ -157,15 +161,15 @@ export const CoworkerInfoService = (setMainData) => {
         } else if (!dataObj?.team_id) {
             const { id, name } = dataObj;
             dispatch(
-                setUserObject({
+                createAction(coworkerTypes.SET_USER_OBJECT, {
                     ...userObject,
                     team_id: id,
                     position_id: 0,
                 })
             );
-            dispatch(setActiveTeamId(id));
+            dispatch(createAction(coworkerTypes.SET_ACTIVE_TEAM_ID, id));
             dispatch(
-                setActiveNames({
+                createAction(coworkerTypes.SET_ACTIVE_NAMES, {
                     teams: name,
                     positions: 'პოზიციები',
                 })
@@ -181,14 +185,17 @@ export const CoworkerInfoService = (setMainData) => {
                 ? e.target.value.trim()
                 : e.target.value;
         dispatch(
-            setUserObject({
+            createAction(coworkerTypes.SET_USER_OBJECT, {
                 ...userObject,
                 [inputType]: value,
             })
         );
         if (formErrors.includes(inputType)) {
             dispatch(
-                setFormErrors(formErrors.filter((err) => err !== inputType))
+                createAction(
+                    coworkerTypes.SET_FORM_ERRORS,
+                    formErrors.filter((err) => err !== inputType)
+                )
             );
         }
     };
@@ -236,11 +243,13 @@ export const CoworkerInfoService = (setMainData) => {
         e.preventDefault();
         const invalidFieldsArray = formValidation();
         if (invalidFieldsArray.length) {
-            dispatch(setFormErrors(invalidFieldsArray));
+            dispatch(
+                createAction(coworkerTypes.SET_FORM_ERRORS, invalidFieldsArray)
+            );
             return;
         }
 
-        setMainData({ ...userObject }); // parent callback
+        setMainDataObject({ ...mainDataObject, ...userObject });
         handleNextRoute();
     };
 
@@ -250,5 +259,6 @@ export const CoworkerInfoService = (setMainData) => {
         handleInputChange,
         handlePositionsDropdown,
         handleTeamsDropdown,
+        state,
     };
 };

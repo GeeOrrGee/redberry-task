@@ -7,8 +7,9 @@ import axios from 'axios';
 export const LaptopService = (
     didMountRef,
     imageInputRef,
-    sendRequest,
-    setMainData
+    setLoadingState,
+    setMainDataObject,
+    mainDataObject
 ) => {
     const [state, dispatch] = useReducer(laptopInfoReducer, defaultState);
     const {
@@ -273,9 +274,8 @@ export const LaptopService = (
             dispatch(createAction(laptopInfoTypes.SET_FORM_ERRORS, errArray));
             return;
         }
-        setMainData(laptopFormObject);
-        // setLoadingState(true);
-        sendRequest();
+        setMainDataObject({ ...mainDataObject, ...laptopFormObject });
+        setLoadingState(true);
     };
 
     return {
