@@ -31,7 +31,7 @@ export const AddLaptop = () => {
 
     //selectors
     const sentData = useSelector(selectSentData);
-    const mainObject = useSelector(selectMainObject);
+    // const mainObject = useSelector(selectMainObject);
     const loadingState = useSelector(selectFormLoading);
     //dispatch callbacks
     const sendRequest = () => dispatch(sendPostRequest());
@@ -136,9 +136,7 @@ export const AddLaptop = () => {
                             <Route
                                 path='/coworker-info'
                                 element={
-                                    <CoworkerInfo
-                                        setMainData={setMainData}
-                                    />
+                                    <CoworkerInfo setMainData={setMainData} />
                                 }
                             />
                             <Route

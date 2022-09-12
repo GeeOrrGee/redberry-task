@@ -1,16 +1,22 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 export const selectForm = (state) => state.form;
-export const selectMainObject = createSelector(
+
+// wrapper/parent route reducer selectors
+export const selectGlobalForm = createSelector(
     [selectForm],
-    (formSlice) => formSlice.mainObject
+    (formSlice) => formSlice.formGlobalReducer
+);
+export const selectMainObject = createSelector(
+    [selectGlobalForm],
+    (globalFormSlice) => globalFormSlice.mainObject
 );
 
 export const selectSentData = createSelector(
-    [selectForm],
-    (formSlice) => formSlice.sentData
+    [selectGlobalForm],
+    (globalFormSlice) => globalFormSlice.sentData
 );
 export const selectFormLoading = createSelector(
-    [selectForm],
-    (formSlice) => formSlice.loadingState
+    [selectGlobalForm],
+    (globalFormSlice) => globalFormSlice.loadingState
 );

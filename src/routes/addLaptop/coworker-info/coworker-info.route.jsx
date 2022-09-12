@@ -8,6 +8,8 @@ import { Dropdown } from '../../../components/Dropdown/dropdown.component';
 import { FormInput } from '../../../components/InputField/input-field.component';
 
 import { CoworkerInfoService } from './coworker-info.service.js';
+import { useSelector } from 'react-redux';
+import { selectUserFormInfo } from '../../../store/Form/user-form/user-form.selectors.js';
 export const CoworkerInfo = ({ setMainData }) => {
     const {
         handleDropdownSelect,
@@ -15,8 +17,9 @@ export const CoworkerInfo = ({ setMainData }) => {
         handleInputChange,
         handlePositionsDropdown,
         handleTeamsDropdown,
-        state,
     } = CoworkerInfoService(setMainData);
+
+    const userFormState = useSelector(selectUserFormInfo());
 
     const {
         userObject,
@@ -24,7 +27,7 @@ export const CoworkerInfo = ({ setMainData }) => {
         teamsCurrData,
         activeNames,
         positionsCurrData,
-    } = state;
+    } = userFormState;
 
     return (
         <FormContainer onSubmit={onSubmitHandler}>

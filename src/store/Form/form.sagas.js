@@ -1,6 +1,6 @@
 import { takeLatest, all, call, put, take, select } from 'redux-saga/effects';
 import axios from 'axios';
-import { FormTypes } from './form.types';
+import { formTypes } from './form.types';
 import { selectMainObject } from './form.selectors';
 import { onPostRequestFail, onPostRequestSuccess } from './form-actions';
 
@@ -25,7 +25,7 @@ export function* postRequest() {
 }
 
 export function* onPostRequestStart() {
-    yield takeLatest(FormTypes.SEND_POST_REQUEST, postRequest);
+    yield takeLatest(formTypes.SEND_POST_REQUEST, postRequest);
 }
 
 export function* formSagas() {
