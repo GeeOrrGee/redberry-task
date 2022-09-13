@@ -1,7 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { formReducer } from './Form/form-reducer';
+import { formGlobalReducer } from './Form/form-global/form-reducer';
 import coworkerReducer from './Form/user-form/user-form.reducer';
 
 export const rootReducer = combineReducers({
-    form: formReducer,
+    form: combineReducers({
+        formGlobalReducer,
+        user: coworkerReducer,
+    }),
 });

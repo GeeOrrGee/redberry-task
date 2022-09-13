@@ -9,14 +9,14 @@ export const selectGlobalForm = createSelector(
 );
 export const selectMainObject = createSelector(
     [selectGlobalForm],
-    (globalFormSlice) => globalFormSlice.mainObject
+    (globalForm) => globalForm.mainObject
 );
 
 export const selectSentData = createSelector(
     [selectGlobalForm],
-    (globalFormSlice) => globalFormSlice.sentData
+    (globalForm) => globalForm.sentData
 );
 export const selectFormLoading = createSelector(
     [selectGlobalForm],
-    (globalFormSlice) => globalFormSlice.loadingState
+    (globalForm) => globalForm.loadingState
 );

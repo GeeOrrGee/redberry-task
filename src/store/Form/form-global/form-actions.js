@@ -1,4 +1,4 @@
-import createAction from '../../utils/action-creator';
+import createAction from '../../../utils/action-creator';
 import { formTypes } from './form.types';
 
 export const sendPostRequest = (data) =>

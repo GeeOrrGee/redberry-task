@@ -1,4 +1,4 @@
-import { createAction } from '@reduxjs/toolkit';
+import createAction from '../../../utils/action-creator';
 import coworkerTypes from './user-form.types';
 
 export const setUserObject = (payload) =>
@@ -14,7 +14,7 @@ export const setFormErrors = (errors) =>
     createAction(coworkerTypes.SET_FORM_ERRORS, errors);
 
 export const setActiveTeamId = (teamId) =>
-    createAction(coworkerTypes.SET_ACTIVE_ID, teamId);
+    createAction(coworkerTypes.SET_ACTIVE_TEAM_ID, teamId);
 
 export const setActiveNames = (names) =>
     createAction(coworkerTypes.SET_ACTIVE_NAMES, names);

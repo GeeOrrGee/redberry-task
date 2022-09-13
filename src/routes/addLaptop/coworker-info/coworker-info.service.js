@@ -3,7 +3,7 @@ import createAction from '../../../utils/action-creator';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserFormInfo } from '../../../store/Form/user-form/user-form.selectors';
+import { selectUserInfo } from '../../../store/Form/user-form/user-form.selectors';
 import {
     setActiveNames,
     setActiveTeamId,
@@ -16,43 +16,17 @@ import {
 export const CoworkerInfoService = (setMainData) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // const [state, dispatch] = useReducer(coworkerReducer, defaultState);
-    console.log(selectUserFormInfo());
     const { userObject, formErrors, activeTeamId, fetchedData, teamsCurrData } =
-        useSelector(selectUserFormInfo());
-    const didMountRef = useRef(false);
-
-    // localStorage logic
-    // useEffect(() => {
-    //     const persistedState = JSON.parse(
-    //         localStorage.getItem('coworker-state')
-    //     );
-    //     if (persistedState) {
-    //         dispatch(
-    //             createAction(coworkerTypes.REHYDRATE_STATE, persistedState)
-    //         );
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     if (didMountRef.current) {
-    //         localStorage.setItem('coworker-state', JSON.stringify(state));
-    //     }
-    //     didMountRef.current = true;
-    // }, [state]);
-
-    // const { userObject, formErrors, activeTeamId, fetchedData, teamsCurrData } =
-    //     state;
-
+        useSelector(selectUserInfo);
     useEffect(() => {
         if (activeTeamId) {
-            const filteredPositions = fetchedData.positions.filter(
+            const filteredPositions = fetchedData.positions?.filter(
                 (obj) => obj.team_id === activeTeamId
             );
 
-            dispatch(setFetchedData(filteredPositions));
+            dispatch(setCurrentPositionsData(filteredPositions));
         }
-    }, [activeTeamId, dispatch, fetchedData.positions]);
+    }, [activeTeamId, dispatch, fetchedData]);
 
     const handleNextRoute = () => {
         navigate('/add-laptop/laptop-specs');

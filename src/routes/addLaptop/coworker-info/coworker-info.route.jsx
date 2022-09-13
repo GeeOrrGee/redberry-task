@@ -9,7 +9,7 @@ import { FormInput } from '../../../components/InputField/input-field.component'
 
 import { CoworkerInfoService } from './coworker-info.service.js';
 import { useSelector } from 'react-redux';
-import { selectUserFormInfo } from '../../../store/Form/user-form/user-form.selectors.js';
+import { selectUserInfo } from '../../../store/Form/user-form/user-form.selectors.js';
 export const CoworkerInfo = ({ setMainData }) => {
     const {
         handleDropdownSelect,
@@ -19,7 +19,7 @@ export const CoworkerInfo = ({ setMainData }) => {
         handleTeamsDropdown,
     } = CoworkerInfoService(setMainData);
 
-    const userFormState = useSelector(selectUserFormInfo());
+    const userFormState = useSelector(selectUserInfo);
 
     const {
         userObject,

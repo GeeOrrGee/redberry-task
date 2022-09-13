@@ -1,44 +1,11 @@
-import { combineReducers } from '@reduxjs/toolkit';
-import { formTypes } from './form-global/form.types';
-import coworkerReducer from './user-form/user-form.reducer';
-const defaultUserObject = {
-    name: '',
-    surname: '',
-    team_id: 0,
-    position_id: 0,
-    email: '',
-    phone_number: '',
-};
-
-const defaultData = {
-    teams: [],
-    positions: [],
-};
-
-const defaultNames = {
-    positions: 'პოზიციები',
-    teams: 'თიმი',
-};
-
-export const defaultUserState = {
-    userObject: defaultUserObject,
-    formErrors: [],
-    activeTeamId: 0,
-    fetchedData: defaultData,
-    teamsCurrData: [],
-    positionsCurrData: [],
-    activeNames: defaultNames,
-};
-
+import { formTypes } from './form.types';
 const defaultState = {
     sentData: false,
     mainObject: {},
     loadingState: false,
-    user: defaultUserState,
-    laptop: {},
 };
 
-export const formReducer = (state = defaultState, action = {}) => {
+export const formGlobalReducer = (state = defaultState, action = {}) => {
     const { type, payload } = action;
 
     switch (type) {

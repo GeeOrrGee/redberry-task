@@ -14,14 +14,13 @@ import { SuccessModal } from '../../components/SuccessModal/success-modal.compon
 import { useDispatch, useSelector } from 'react-redux';
 import {
     selectFormLoading,
-    selectMainObject,
     selectSentData,
-} from '../../store/Form/form.selectors';
+} from '../../store/Form/form-global/form.selectors';
 import {
     onPostRequestSuccess,
     sendPostRequest,
     setMainObject,
-} from '../../store/Form/form-actions';
+} from '../../store/Form/form-global/form-actions';
 export const AddLaptop = () => {
     const didMountRef = useRef(false);
     const dispatch = useDispatch();

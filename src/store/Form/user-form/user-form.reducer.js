@@ -19,7 +19,7 @@ const defaultNames = {
     teams: 'თიმი',
 };
 
-export const defaultState = {
+export const defaultUserState = {
     userObject: defaultUserObject,
     formErrors: [],
     activeTeamId: 0,
@@ -29,8 +29,9 @@ export const defaultState = {
     activeNames: defaultNames,
 };
 
-export const coworkerReducer = (state = defaultState, action) => {
+export const coworkerReducer = (state = defaultUserState, action) => {
     const { type, payload } = action;
+    console.log(type);
     switch (type) {
         case coworkerTypes.SET_USER_OBJECT:
             return { ...state, userObject: payload };
