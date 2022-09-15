@@ -10,8 +10,10 @@ import { useEffect } from 'react';
 
 export const SuccessModal = () => {
     useEffect(() => {
+        console.log('asd');
         localStorage.clear();
     }, []);
+    const clearLocalStorage = () => localStorage.clear();
     return (
         <>
             <Backdrop />{' '}
@@ -24,10 +26,12 @@ export const SuccessModal = () => {
                     <h2>ჩანაწერი დამატებულია!</h2>
                 </SuccessMessageContainer>
                 <LinksContainer>
-                    <Link to='/laptops'>
+                    <Link to='/laptops' onClick={clearLocalStorage}>
                         <BlueButton>სიაში გადაყვანა</BlueButton>
                     </Link>
-                    <Link to={'/'}>მთავარი</Link>
+                    <Link to={'/'} onClick={clearLocalStorage}>
+                        მთავარი
+                    </Link>
                 </LinksContainer>
             </SuccessModalContainer>
             ;
