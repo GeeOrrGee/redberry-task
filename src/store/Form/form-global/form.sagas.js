@@ -1,4 +1,4 @@
-import { takeLatest, all, call, put, take, select } from 'redux-saga/effects';
+import { takeLatest, all, call, put, select } from 'redux-saga/effects';
 import axios from 'axios';
 import { formTypes } from './form.types';
 import { selectMainObject } from './form.selectors';
@@ -17,6 +17,7 @@ export function* postRequest() {
             'https://pcfy.redberryinternship.ge/api/laptop/create',
             fd
         );
+        console.log(response);
 
         yield put(onPostRequestSuccess());
     } catch (err) {

@@ -1,5 +1,3 @@
-import { createSelector } from '@reduxjs/toolkit';
-
 export const selectLaptopInfo = (state) => state.form.laptop;
 
 // export const selectLaptopActiveNames = createSelector(

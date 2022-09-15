@@ -6,9 +6,6 @@ import {
     SuccessModalContainer,
 } from './success-modal.styles';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setDefault } from '../../store/Form/form-global/form-actions';
 
 export const SuccessModal = () => {
     // const dispatch = useDispatch();

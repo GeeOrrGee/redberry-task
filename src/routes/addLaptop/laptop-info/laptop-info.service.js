@@ -1,5 +1,3 @@
-import { useReducer, useEffect } from 'react';
-import createAction from '../../../utils/action-creator';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLaptopInfo } from '../../../store/Form/laptop-form/laptop-form.selectors';

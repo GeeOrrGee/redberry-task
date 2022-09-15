@@ -6,9 +6,8 @@ import {
     NavlinksContainer,
     VectorContainer,
 } from './add-laptop.styles';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import LaptopInfo from './laptop-info/laptop-info.route';
-import axios from 'axios';
 import { Loader, LoaderContainer } from '../../shared/loader/loader.styles';
 import { SuccessModal } from '../../components/SuccessModal/success-modal.component';
 import { useDispatch, useSelector } from 'react-redux';
