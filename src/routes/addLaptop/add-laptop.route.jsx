@@ -17,8 +17,8 @@ import {
     selectSentData,
 } from '../../store/Form/form-global/form.selectors';
 import {
-    onPostRequestSuccess,
     sendPostRequest,
+    setDefault,
     setMainObject,
 } from '../../store/Form/form-global/form-actions';
 export const AddLaptop = () => {
@@ -44,6 +44,9 @@ export const AddLaptop = () => {
         setCounter(currentStep);
     }, [currUrl]);
 
+    useEffect(() => {
+        return () => dispatch(setDefault());
+    }, [dispatch]);
     // useEffect(() => {
     //     if (loadingState) {
     //         dispatch(sendPostRequest());

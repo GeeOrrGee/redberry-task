@@ -45,7 +45,7 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
         removeImgHandler,
         addPhotoHandler,
         dragHandler,
-        state,
+        laptopInfoState,
     } = LaptopService(didMountRef, imageInputRef, sendRequest, setMainData);
     const {
         activeNames,
@@ -53,7 +53,7 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
         imageInputDragEnter,
         formErrors,
         currData,
-    } = state;
+    } = laptopInfoState;
 
     return (
         <FormContainer onSubmit={onSubmitHandler}>

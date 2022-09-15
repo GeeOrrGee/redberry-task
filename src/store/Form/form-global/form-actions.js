@@ -11,3 +11,5 @@ export const onPostRequestFail = (error) =>
 
 export const setMainObject = (object) =>
     createAction(formTypes.SET_MAIN_OBJECT, object);
+
+export const setDefault = () => createAction(formTypes.SET_DEFAULT);

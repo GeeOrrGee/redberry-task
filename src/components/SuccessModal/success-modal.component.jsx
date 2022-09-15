@@ -7,11 +7,19 @@ import {
 } from './success-modal.styles';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setDefault } from '../../store/Form/form-global/form-actions';
 
 export const SuccessModal = () => {
-    useEffect(() => {
-        localStorage.clear();
-    }, []);
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //     localStorage.clear();
+    //     // const reset = () => dispatch(setDefault());
+    //     return () => {
+    //         console.log('fired');
+    //         dispatch(setDefault());
+    //     };
+    // }, [dispatch]);
     return (
         <>
             <Backdrop />{' '}
