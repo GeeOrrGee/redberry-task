@@ -22,7 +22,6 @@ import {
     setMainObject,
 } from '../../store/Form/form-global/form-actions';
 export const AddLaptop = () => {
-    const didMountRef = useRef(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [mobileState, setMobileState] = useState(false);
