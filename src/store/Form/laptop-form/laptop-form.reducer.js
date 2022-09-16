@@ -27,7 +27,7 @@ export const defaultState = {
 
 export const laptopInfoReducer = (state = defaultState, action = {}) => {
     const { type, payload } = action;
-    console.log(payload);
+
     switch (type) {
         case laptopInfoTypes.SET_FORM_ERRORS:
             return { ...state, formErrors: payload };

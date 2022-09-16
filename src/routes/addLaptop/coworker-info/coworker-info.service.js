@@ -8,16 +8,27 @@ import {
     setActiveNames,
     setActiveTeamId,
     setCurrentPositionsData,
-    setCurrentTeamsData,
-    setFetchedData,
     setFormErrors,
     setUserObject,
+    fetchPositionsStart,
+    fetchTeamsStart,
 } from '../../../store/Form/user-form/user-form.actions';
+import { act } from 'react-dom/test-utils';
+
 export const CoworkerInfoService = (setMainData) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userObject, formErrors, activeTeamId, fetchedData, teamsCurrData } =
         useSelector(selectUserInfo);
+
+    useEffect(() => {
+        if (activeTeamId && teamsCurrData.length) {
+            const { name } = teamsCurrData.find(
+                (obj) => obj.id === activeTeamId
+            );
+            dispatch(setActiveNames({ teams: name }));
+        }
+    }, [activeTeamId, teamsCurrData, dispatch]);
     useEffect(() => {
         if (activeTeamId) {
             const filteredPositions = fetchedData.positions?.filter(
@@ -37,40 +48,19 @@ export const CoworkerInfoService = (setMainData) => {
 
     const handleTeamsDropdown = async () => {
         if (!fetchedData.teams.length) {
-            const {
-                data: { data },
-            } = await axios('https://pcfy.redberryinternship.ge/api/teams');
             dispatch(
-                setFetchedData({
-                    ...fetchedData,
-                    teams: data,
-                })
+                fetchTeamsStart('https://pcfy.redberryinternship.ge/api/teams')
             );
-            dispatch(setCurrentTeamsData(data));
         }
     };
 
     const handlePositionsDropdown = async () => {
         if (!fetchedData.positions.length) {
-            const {
-                data: { data },
-            } = await axios('https://pcfy.redberryinternship.ge/api/positions');
             dispatch(
-                setFetchedData({
-                    ...fetchedData,
-                    positions: data,
-                })
+                fetchPositionsStart(
+                    'https://pcfy.redberryinternship.ge/api/positions'
+                )
             );
-            if (activeTeamId) {
-                const filteredPositions = data.filter(
-                    (position) =>
-                        activeTeamId && position.team_id === activeTeamId
-                );
-                dispatch(setCurrentPositionsData(filteredPositions));
-                return;
-            } else {
-                dispatch(setCurrentPositionsData(data));
-            }
         }
     };
 
@@ -101,18 +91,15 @@ export const CoworkerInfoService = (setMainData) => {
 
             dispatch(setActiveTeamId(team_id));
             if (!teamsCurrData.length) {
-                axios('https://pcfy.redberryinternship.ge/api/teams').then(
-                    ({ data: { data } }) => {
-                        const [autoSelectTeam] = data.filter(
-                            (obj) => obj.id === team_id
-                        );
-                        dispatch(
-                            setActiveNames({
-                                teams: autoSelectTeam.name,
-                                positions: name,
-                            })
-                        );
-                    }
+                dispatch(
+                    fetchTeamsStart(
+                        'https://pcfy.redberryinternship.ge/api/teams'
+                    )
+                );
+                dispatch(
+                    setActiveNames({
+                        positions: name,
+                    })
                 );
             } else {
                 const [autoSelectTeam] = teamsCurrData.filter(

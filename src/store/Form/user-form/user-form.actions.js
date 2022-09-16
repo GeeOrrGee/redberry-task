@@ -19,5 +19,16 @@ export const setActiveTeamId = (teamId) =>
 export const setActiveNames = (names) =>
     createAction(coworkerTypes.SET_ACTIVE_NAMES, names);
 
-export const setFetchedData = (data) =>
-    createAction(coworkerTypes.SET_FETCHED_DATA, data);
+// async
+
+export const fetchPositionsStart = (url) =>
+    createAction(coworkerTypes.FETCH_USER_DATA_POSITIONS_START, url);
+
+export const fetchTeamsStart = (url) =>
+    createAction(coworkerTypes.FETCH_USER_DATA_TEAMS_START, url);
+
+export const onUserFetchSuccess = (dataMap) =>
+    createAction(coworkerTypes.FETCH_USER_DATA_SUCCESS, dataMap);
+
+export const onUserFetchFail = (err) =>
+    createAction(coworkerTypes.FETCH_USER_DATA_FAIL, err);

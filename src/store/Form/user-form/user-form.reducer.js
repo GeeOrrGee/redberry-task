@@ -25,13 +25,13 @@ export const defaultUserState = {
     activeTeamId: 0,
     fetchedData: defaultData,
     teamsCurrData: [],
-    positionsCurrData: [],
+    positioinsCurrData: [],
     activeNames: defaultNames,
 };
 
 export const coworkerReducer = (state = defaultUserState, action) => {
     const { type, payload } = action;
-    console.log(type);
+
     switch (type) {
         case coworkerTypes.SET_USER_OBJECT:
             return { ...state, userObject: payload };
@@ -42,8 +42,10 @@ export const coworkerReducer = (state = defaultUserState, action) => {
         case coworkerTypes.SET_ACTIVE_TEAM_ID:
             return { ...state, activeTeamId: payload };
 
-        case coworkerTypes.SET_FETCHED_DATA:
+        case coworkerTypes.FETCH_USER_DATA_SUCCESS:
             return { ...state, fetchedData: payload };
+        case coworkerTypes.FETCH_USER_DATA_FAIL:
+            return { ...state, error: payload };
 
         case coworkerTypes.SET_CURR_TEAMS_DATA:
             return { ...state, teamsCurrData: payload };
@@ -52,10 +54,11 @@ export const coworkerReducer = (state = defaultUserState, action) => {
             return { ...state, positionsCurrData: payload };
 
         case coworkerTypes.SET_ACTIVE_NAMES:
-            return { ...state, activeNames: payload };
+            return {
+                ...state,
+                activeNames: { ...state.activeNames, ...payload },
+            };
 
-        // case coworkerTypes.REHYDRATE_STATE:
-        //     return { ...payload };
         default:
             return state;
     }
