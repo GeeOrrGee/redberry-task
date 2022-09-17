@@ -1,5 +1,5 @@
 import createAction from '../../../utils/action-creator';
-import { formTypes } from './form.types';
+import { formTypes } from './globalForm.types';
 
 export const sendPostRequest = (data) =>
     createAction(formTypes.SEND_POST_REQUEST, data);

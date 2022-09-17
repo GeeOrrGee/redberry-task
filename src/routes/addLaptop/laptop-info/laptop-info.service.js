@@ -2,18 +2,14 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLaptopInfo } from '../../../store/Form/laptop-form/laptop-form.selectors';
 import {
+    fetchLaptopFormDataStart,
     setImageInputDragEnter,
     setLaptopActiveNames,
     setLaptopData,
     setLaptopFormErrors,
     setLaptopFormObject,
 } from '../../../store/Form/laptop-form/laptop-form.actions';
-export const LaptopService = (
-    didMountRef,
-    imageInputRef,
-    sendRequest,
-    setMainData
-) => {
+export const LaptopService = (imageInputRef, sendRequest, setMainData) => {
     const dispatch = useDispatch();
     //localStorage logic
 
@@ -75,18 +71,11 @@ export const LaptopService = (
     const onBrandsDropdownHandler = async () => {
         if (fetchedData.brands?.length) return;
         try {
-            const {
-                data: { data },
-            } = await axios('https://pcfy.redberryinternship.ge/api/brands');
-
-            const modifiedData = data.map((obj) => ({
-                ...obj,
-                fieldName: 'laptop_brand_id',
-            }));
             dispatch(
-                setLaptopData({
-                    ...fetchedData,
-                    brands: modifiedData,
+                fetchLaptopFormDataStart({
+                    dataKey: 'brands',
+                    url: 'https://pcfy.redberryinternship.ge/api/brands',
+                    fieldName: 'laptop_brand_id', //crafting new object in saga for api
                 })
             );
         } catch (err) {
@@ -96,19 +85,11 @@ export const LaptopService = (
     const onCpuDropdownHandler = async () => {
         if (fetchedData.cpus?.length) return;
         try {
-            const {
-                data: { data },
-            } = await axios('https://pcfy.redberryinternship.ge/api/cpus');
-
-            const modifiedData = data.map((obj) => ({
-                ...obj,
-                fieldName: 'laptop_cpu',
-            }));
-
             dispatch(
-                setLaptopData({
-                    ...fetchedData,
-                    cpus: modifiedData,
+                fetchLaptopFormDataStart({
+                    dataKey: 'cpus',
+                    url: 'https://pcfy.redberryinternship.ge/api/cpus',
+                    fieldName: 'laptop_cpu',
                 })
             );
         } catch (err) {

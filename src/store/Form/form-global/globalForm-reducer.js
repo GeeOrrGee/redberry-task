@@ -1,4 +1,4 @@
-import { formTypes } from './form.types';
+import { formTypes } from './globalForm.types';
 const defaultState = {
     sentData: false,
     mainObject: {},

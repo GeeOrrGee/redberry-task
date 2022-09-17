@@ -18,7 +18,7 @@ export const defaultState = {
     imageInputDragEnter: false,
     formErrors: [],
     fetchedData: {},
-    currData: {},
+    // currData: {},
     activeNames: {
         laptop_cpu: 'CPU',
         laptop_brand_id: 'ლეპტოპის ბრენდი',
@@ -36,10 +36,16 @@ export const laptopInfoReducer = (state = defaultState, action = {}) => {
 
         case laptopInfoTypes.SET_LAPTOP_FORM_OBJECT:
             return { ...state, laptopFormObject: payload };
-        case laptopInfoTypes.SET_FETCHED_DATA:
-            return { ...state, fetchedData: payload, currData: payload };
-        case laptopInfoTypes.SET_CURR_DATA:
-            return { ...state, currData: payload };
+
+        case laptopInfoTypes.FETCH_LAPTOP_DATA_SUCCESS:
+            return {
+                ...state,
+                fetchedData: { ...state.fetchedData, ...payload },
+            };
+        // case laptopInfoTypes.SET_FETCHED_DATA:
+        //     return { ...state, fetchedData: payload, currData: payload };
+        // case laptopInfoTypes.SET_CURR_DATA:
+        //     return { ...state, currData: payload };
         case laptopInfoTypes.SET_ACTIVE_NAMES:
             return { ...state, activeNames: payload };
 

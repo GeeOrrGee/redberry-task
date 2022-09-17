@@ -14,12 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     selectFormLoading,
     selectSentData,
-} from '../../store/Form/form-global/form.selectors';
+} from '../../store/Form/form-global/globalForm.selectors';
 import {
     sendPostRequest,
     setDefault,
     setMainObject,
-} from '../../store/Form/form-global/form-actions';
+} from '../../store/Form/form-global/globalForm-actions';
 export const AddLaptop = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

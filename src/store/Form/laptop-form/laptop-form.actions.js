@@ -18,3 +18,13 @@ export const setLaptopActiveNames = (activeNames) =>
 
 export const setLaptopFormObject = (laptopInfo) =>
     createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, laptopInfo);
+
+// saga actions
+
+export const fetchLaptopFormDataStart = (urlObj) =>
+    createAction(laptopInfoTypes.FETCH_LAPTOP_DATA_START, urlObj);
+
+export const fetchLaptopFormDataSuccess = (dataObj) =>
+    createAction(laptopInfoTypes.FETCH_LAPTOP_DATA_SUCCESS, dataObj);
+export const fetchLaptopFormDataFail = (error) =>
+    createAction(laptopInfoTypes.FETCH_LAPTOP_DATA_FAIL, error);

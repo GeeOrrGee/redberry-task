@@ -46,13 +46,13 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
         addPhotoHandler,
         dragHandler,
         laptopInfoState,
-    } = LaptopService(didMountRef, imageInputRef, sendRequest, setMainData);
+    } = LaptopService(imageInputRef, sendRequest, setMainData);
     const {
         activeNames,
         laptopFormObject,
         imageInputDragEnter,
         formErrors,
-        currData,
+        fetchedData,
     } = laptopInfoState;
 
     return (
@@ -140,7 +140,7 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
                 <Dropdown
                     name={activeNames.laptop_brand_id}
                     callbackHandler={onBrandsDropdownHandler}
-                    data={currData.brands}
+                    data={fetchedData.brands}
                     onSelectHandler={onDropDownSelectHandler}
                     errorState={formErrors.includes('laptop_brand_id')}
                 />
@@ -148,7 +148,7 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
             <ThinLine />
             <MultipleInputContainer>
                 <Dropdown
-                    data={currData.cpus}
+                    data={fetchedData.cpus}
                     name={activeNames.laptop_cpu}
                     callbackHandler={onCpuDropdownHandler}
                     onSelectHandler={onDropDownSelectHandler}
