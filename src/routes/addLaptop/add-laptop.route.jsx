@@ -64,14 +64,6 @@ export const AddLaptop = () => {
         return window.removeEventListener('resize', () => renderRedberryLogo());
     }, [mobileState]);
 
-    useEffect(() => {
-        const savedProgress = JSON.parse(
-            localStorage.getItem('add-laptop-state')
-        );
-        if (savedProgress) {
-            const { persistedMainDataObject, persistedSendDataState } =
-                savedProgress;
-
     //         setMainDataObject(persistedMainDataObject);
     //     }
     // }, [navigate]);
