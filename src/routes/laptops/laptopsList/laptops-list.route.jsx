@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
@@ -16,7 +16,7 @@ import {
 
 export const LaptopsList = () => {
     const dispatch = useDispatch();
-    const { fetchedData, error, loading } = useSelector(
+    const { fetchedData, loading } = useSelector(
         selectLaptopsListReducer
     );
     const navigate = useNavigate();

@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ThinLine } from '../../../shared/formContainerWrappers/formContainerWrappers';
 
@@ -20,7 +19,7 @@ export const LaptopDetails = () => {
     useEffect(() => {
         dispatch(fetchLaptopDetailsStart(id));
     }, [dispatch, id]);
-    const { fetchedData, loading, error } = useSelector(selectLaptopDetails);
+    const { fetchedData, loading } = useSelector(selectLaptopDetails);
     const { user, laptop, image, extra } = fetchedData;
 
     return (
