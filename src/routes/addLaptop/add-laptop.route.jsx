@@ -13,23 +13,26 @@ import { SuccessModal } from '../../components/SuccessModal/success-modal.compon
 import { useDispatch, useSelector } from 'react-redux';
 import {
     selectFormLoading,
-    selectMainObject,
     selectSentData,
-} from '../../store/Form/form.selectors';
+} from '../../store/Form/form-global/globalForm.selectors';
 import {
-    onPostRequestSuccess,
     sendPostRequest,
+    setDefault,
     setMainObject,
-} from '../../store/Form/form-actions';
+} from '../../store/Form/form-global/globalForm-actions';
 export const AddLaptop = () => {
-    const didMountRef = useRef(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [mobileState, setMobileState] = useState(false);
-    const [mainDataObject, setMainDataObject] = useState('');
-    const [sendData, setSendData] = useState(false);
-    const [loadingState, setLoadingState] = useState(false);
     const [counter, setCounter] = useState('');
+
+    //selectors
+    const sentData = useSelector(selectSentData);
+    // const mainObject = useSelector(selectMainObject);
+    const loadingState = useSelector(selectFormLoading);
+    //dispatch callbacks
+    const sendRequest = () => dispatch(sendPostRequest());
+    const setMainData = (data) => dispatch(setMainObject(data));
 
     const currUrl = window.location.pathname;
     useEffect(() => {
@@ -40,49 +43,10 @@ export const AddLaptop = () => {
         setCounter(currentStep);
     }, [currUrl]);
 
-    // useEffect(() => {
-    //     if (loadingState) {
-    //         dispatch(sendPostRequest());
-    //     }
-    // }, [mainDataObject, loadingState, dispatch]);
-
-                Object.keys(mainDataObject).forEach((key) => {
-                    fd.append(key, mainDataObject[key]);
-                });
-
-                fd.append('token', '0f90a3c3ac54034b3e3675b2a4160ed7');
-                const sd = await axios.postForm(
-                    'https://pcfy.redberryinternship.ge/api/laptop/create',
-                    fd
-                );
-                console.log(sd);
-                setLoadingState(false);
-                setSendData(true);
-            } catch (err) {
-                throw new Error(err);
-            }
-        };
-        if (loadingState) {
-            postRequest();
-        }
-    }, [mainDataObject, loadingState]);
-
     useEffect(() => {
-        if (didMountRef.current && mainDataObject) {
-            const persistedObjConfig = {
-                persistedMainDataObject: mainDataObject,
-                persistedSendDataState: sendData,
-            };
+        return () => dispatch(setDefault());
+    }, [dispatch]);
 
-            localStorage.setItem(
-                'add-laptop-state',
-                JSON.stringify(persistedObjConfig)
-            );
-        }
-        didMountRef.current = true;
-    }, [sendData, loadingState, mainDataObject]);
-
-    //handling mobile navigation side effects
     useEffect(() => {
         const renderRedberryLogo = () => {
             const getCurrentWidth = window.innerWidth;
@@ -108,10 +72,9 @@ export const AddLaptop = () => {
             const { persistedMainDataObject, persistedSendDataState } =
                 savedProgress;
 
-            setSendData(persistedSendDataState);
-            setMainDataObject(persistedMainDataObject);
-        }
-    }, [navigate]);
+    //         setMainDataObject(persistedMainDataObject);
+    //     }
+    // }, [navigate]);
 
     const prevRoute = () => navigate(-1);
     return (
@@ -123,7 +86,7 @@ export const AddLaptop = () => {
             )}
 
             <AddLaptopContainer>
-                {!sendData ? (
+                {!sentData ? (
                     <>
                         {' '}
                         {
@@ -154,20 +117,15 @@ export const AddLaptop = () => {
                             <Route
                                 path='/coworker-info'
                                 element={
-                                    <CoworkerInfo
-                                        mainDataObject={mainDataObject}
-                                        setMainDataObject={setMainDataObject}
-                                    />
+                                    <CoworkerInfo setMainData={setMainData} />
                                 }
                             />
                             <Route
                                 path='/laptop-specs'
                                 element={
                                     <LaptopInfo
-                                        mainDataObject={mainDataObject}
-                                        setMainDataObject={setMainDataObject}
-                                        setSendData={setSendData}
-                                        setLoadingState={setLoadingState}
+                                        setMainData={setMainData}
+                                        sendRequest={sendRequest}
                                         mobileState={mobileState}
                                     />
                                 }
