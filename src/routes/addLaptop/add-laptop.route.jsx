@@ -46,27 +46,7 @@ export const AddLaptop = () => {
     useEffect(() => {
         return () => dispatch(setDefault());
     }, [dispatch]);
-    // useEffect(() => {
-    //     if (loadingState) {
-    //         dispatch(sendPostRequest());
-    //     }
-    // }, [mainDataObject, loadingState, dispatch]);
 
-    // useEffect(() => {
-    //     if (didMountRef.current && mainDataObject) {
-    //         const persistedObjConfig = {
-    //             persistedMainDataObject: mainDataObject,
-    //         };
-
-    //         localStorage.setItem(
-    //             'add-laptop-state',
-    //             JSON.stringify(persistedObjConfig)
-    //         );
-    //     }
-    //     didMountRef.current = true;
-    // }, [loadingState, mainDataObject]);
-
-    //handling mobile navigation side effects
     useEffect(() => {
         const renderRedberryLogo = () => {
             const getCurrentWidth = window.innerWidth;
