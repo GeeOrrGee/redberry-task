@@ -8,6 +8,7 @@ Used technologies:
 ~ React (Functional);
 ~Styled-components with SCSS syntax;
 ~REST API;
-~State management with useReducer() hook;
+~Redux;
+~Redux-Saga;
 
 At the moment I'm planning to migrate this project to Redux/Redux-Saga just to practice for a bit.
