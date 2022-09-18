@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ThinLine } from '../../../shared/formContainerWrappers/formContainerWrappers';
 
@@ -11,109 +10,21 @@ import {
     TwoSidesContainer,
 } from './laptop-details.styles';
 import { ReactComponent as GELSymbol } from '../../../assets/addLaptop/GEL.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLaptopDetailsStart } from '../../../store/laptops/laptopDetails/laptopDetails.actions';
+import { selectLaptopDetails } from '../../../store/laptops/laptopDetails/laptopDetails.selectors';
 export const LaptopDetails = () => {
-    const defaultState = {
-        user: {},
-        laptop: {},
-        extra: {},
-        image: '',
-    };
     const { id } = useParams();
-    const [fetchedData, setFetchedData] = useState(defaultState);
+    const dispatch = useDispatch();
     useEffect(() => {
-        if (!Object.keys(fetchedData.user).length) {
-            const fetchData = async () => {
-                try {
-                    const {
-                        data: { data },
-                    } = await axios(
-                        `https://pcfy.redberryinternship.ge/api/laptop/${id}?token=0f90a3c3ac54034b3e3675b2a4160ed7`
-                    );
-                    const responseBrand = await axios(
-                        `https://pcfy.redberryinternship.ge/api/brands`
-                    );
-                    const positionResponse = await axios(
-                        `https://pcfy.redberryinternship.ge/api/positions`
-                    );
-                    const teamsResponse = await axios(
-                        `https://pcfy.redberryinternship.ge/api/teams`
-                    );
-                    const {
-                        user: {
-                            team_id,
-                            position_id,
-                            name,
-                            surname,
-                            phone_number,
-                            email,
-                        },
-                        laptop: {
-                            brand_id,
-                            cpu,
-                            image,
-                            purchase_date,
-                            state,
-                            price,
-                            ram,
-                            hard_drive_type,
-                        },
-                    } = data;
-                    const brandName = responseBrand.data.data.find(
-                        (brandObj) => brandObj.id === brand_id
-                    );
-
-                    const positionName = positionResponse.data.data.find(
-                        (positionObj) => positionObj.id === position_id
-                    );
-
-                    const teamName = teamsResponse.data.data.find(
-                        (teamObj) => teamObj.id === team_id
-                    );
-
-                    // re-creating/modifying necessary objects to make them dynamic and iterable enough to use them in JSX
-                    const user = {
-                        სახელი: name,
-                        გვარი: surname,
-                        თიმი: teamName.name,
-                        პოზიცია: positionName.name,
-                        მეილი: email,
-                        'ტელ. ნომერი': phone_number,
-                    };
-
-                    const laptop = {
-                        'ლეპტოპის სახელი': data.laptop.name,
-                        'ლეპტოპის ბრენდი': brandName.name,
-                        RAM: ram,
-                        'მეხსიერების ტიპი': hard_drive_type,
-                        CPU: cpu.name,
-                        'CPU-ს ბირთვი': cpu.cores,
-                        'CPU-ს ნაკადი': cpu.threads,
-                    };
-
-                    const extra = {
-                        'ლეპტოპის მდგომარეობა':
-                            state === 'used' ? 'მეორადი' : 'ახალი',
-                        'ლეპტოპის ფასი': price,
-                        'შეძენის რიცხვი': !purchase_date
-                            ? 'არ არის მითითებული'
-                            : purchase_date,
-                    };
-
-                    setFetchedData({ user, laptop, extra, image });
-                } catch (err) {
-                    throw new Error(err);
-                }
-            };
-            fetchData();
-        }
-    }, [fetchedData, id]);
-
+        dispatch(fetchLaptopDetailsStart(id));
+    }, [dispatch, id]);
+    const { fetchedData, loading } = useSelector(selectLaptopDetails);
     const { user, laptop, image, extra } = fetchedData;
 
     return (
         <>
-            {!Object.keys(fetchedData.user).length &&
-            !Object.keys(fetchedData.laptop).length ? (
+            {loading ? (
                 <LoaderContainer>
                     <Loader />
                 </LoaderContainer>

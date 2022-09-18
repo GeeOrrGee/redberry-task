@@ -31,12 +31,7 @@ const laptopCondition = [
     { type: 'მეორადი', value: 'used' },
 ];
 
-export const LaptopInfo = ({
-    mainDataObject,
-    setMainDataObject,
-    setLoadingState,
-    mobileState,
-}) => {
+export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
     const imageInputRef = useRef();
     const didMountRef = useRef(false);
     const {
@@ -50,21 +45,15 @@ export const LaptopInfo = ({
         removeImgHandler,
         addPhotoHandler,
         dragHandler,
-        state,
-    } = LaptopService(
-        didMountRef,
-        imageInputRef,
-        setLoadingState,
-        setMainDataObject,
-        mainDataObject
-    );
+        laptopInfoState,
+    } = LaptopService(imageInputRef, sendRequest, setMainData);
     const {
         activeNames,
         laptopFormObject,
         imageInputDragEnter,
         formErrors,
-        currData,
-    } = state;
+        fetchedData,
+    } = laptopInfoState;
 
     return (
         <FormContainer onSubmit={onSubmitHandler}>
@@ -151,7 +140,7 @@ export const LaptopInfo = ({
                 <Dropdown
                     name={activeNames.laptop_brand_id}
                     callbackHandler={onBrandsDropdownHandler}
-                    data={currData.brands}
+                    data={fetchedData.brands}
                     onSelectHandler={onDropDownSelectHandler}
                     errorState={formErrors.includes('laptop_brand_id')}
                 />
@@ -159,7 +148,7 @@ export const LaptopInfo = ({
             <ThinLine />
             <MultipleInputContainer>
                 <Dropdown
-                    data={currData.cpus}
+                    data={fetchedData.cpus}
                     name={activeNames.laptop_cpu}
                     callbackHandler={onCpuDropdownHandler}
                     onSelectHandler={onDropDownSelectHandler}

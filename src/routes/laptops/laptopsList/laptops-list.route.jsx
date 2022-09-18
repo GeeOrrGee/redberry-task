@@ -1,8 +1,10 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { BlueButton } from '../../../shared/blueButton/blue-button.styles';
 import { Loader, LoaderContainer } from '../../../shared/loader/loader.styles';
+import { fetchLaptopsStart } from '../../../store/laptops/laptopsList/laptopsList.actions';
+import { selectLaptopsListReducer } from '../../../store/laptops/laptopsList/laptopsList.selectors';
 
 import {
     LaptopContainer,
@@ -12,27 +14,13 @@ import {
 } from './laptops-list.style';
 
 export const LaptopsList = () => {
-    const [fetchedData, setFetechedData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const { fetchedData, loading } = useSelector(selectLaptopsListReducer);
     const navigate = useNavigate();
     const handleRedirect = () => navigate('/add-laptop/coworker-info');
     useEffect(() => {
-        (async () => {
-            try {
-                setLoading(true);
-                const {
-                    data: { data },
-                } = await axios(
-                    `https://pcfy.redberryinternship.ge/api/laptops?token=${'0f90a3c3ac54034b3e3675b2a4160ed7'}`
-                );
-                setFetechedData(data);
-                setLoading(false);
-            } catch (err) {
-                setLoading(false);
-                alert(err.message);
-            }
-        })();
-    }, []);
+        dispatch(fetchLaptopsStart());
+    }, [dispatch]);
 
     return (
         <>
@@ -51,6 +39,7 @@ export const LaptopsList = () => {
                                         user,
                                         laptop: { name, id, image },
                                     } = laptop;
+
                                     return (
                                         <LaptopContainer key={id}>
                                             <div>

@@ -1,68 +1,32 @@
-import laptopInfoReducer from './laptop-info.reducer';
-import { laptopInfoTypes } from './laptop-info.types';
-import { useReducer, useEffect } from 'react';
-import { defaultState } from './laptop-info.reducer';
-import createAction from '../../../utils/action-creator';
 import axios from 'axios';
-export const LaptopService = (
-    didMountRef,
-    imageInputRef,
-    setLoadingState,
-    setMainDataObject,
-    mainDataObject
-) => {
-    const [state, dispatch] = useReducer(laptopInfoReducer, defaultState);
-    const {
-        activeNames,
-        laptopFormObject,
-        imageInputDragEnter,
-        formErrors,
-        fetchedData,
-    } = state;
-
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLaptopInfo } from '../../../store/Form/laptop-form/laptop-form.selectors';
+import {
+    fetchLaptopFormDataStart,
+    setImageInputDragEnter,
+    setLaptopActiveNames,
+    setLaptopData,
+    setLaptopFormErrors,
+    setLaptopFormObject,
+} from '../../../store/Form/laptop-form/laptop-form.actions';
+export const LaptopService = (imageInputRef, sendRequest, setMainData) => {
+    const dispatch = useDispatch();
     //localStorage logic
 
-    useEffect(() => {
-        const persistedState = JSON.parse(
-            localStorage.getItem('laptop-info-state')
-        );
-
-        if (persistedState) {
-            dispatch(
-                createAction(laptopInfoTypes.REHYDRATE_STATE, persistedState)
-            );
-        }
-    }, []);
-
-    useEffect(() => {
-        if (didMountRef.current) {
-            const modifiedState = {
-                ...state,
-                laptopFormObject: {
-                    ...laptopFormObject,
-                    laptop_image: null,
-                },
-            };
-            localStorage.setItem(
-                'laptop-info-state',
-                JSON.stringify(modifiedState)
-            );
-        }
-        didMountRef.current = true;
-    }, [laptopFormObject, state, didMountRef]);
-
     /////////////////////////////////////////////
-
+    const laptopInfoState = useSelector(selectLaptopInfo);
+    const {
+        imageInputDragEnter,
+        laptopFormObject,
+        formErrors,
+        activeNames,
+        fetchedData,
+    } = laptopInfoState;
     //image drop handler logic
     const dragHandler = (e) => {
         e.stopPropagation();
 
-        dispatch(
-            createAction(
-                laptopInfoTypes.SET_IMAGE_INPUT_DRAG_ENTER,
-                !imageInputDragEnter
-            )
-        );
+        dispatch(setImageInputDragEnter(!imageInputDragEnter));
     };
 
     const addPhotoHandler = (e) => {
@@ -75,7 +39,7 @@ export const LaptopService = (
         imageInputRef.current.value = null;
 
         dispatch(
-            createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+            setLaptopFormObject({
                 ...laptopFormObject,
                 laptop_image: null,
             })
@@ -85,23 +49,20 @@ export const LaptopService = (
         // e.stopPropagation();
         if (formErrors.includes('laptop_image')) {
             dispatch(
-                createAction(
-                    laptopInfoTypes.SET_FORM_ERRORS,
+                setLaptopFormErrors(
                     formErrors.filter((err) => err !== 'laptop_image')
                 )
             );
         }
         if (e.target.files && e.target.files[0]) {
             dispatch(
-                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                setLaptopFormObject({
                     ...laptopFormObject,
                     laptop_image: e.target.files[0],
                 })
             );
         }
-        dispatch(
-            createAction(laptopInfoTypes.SET_IMAGE_INPUT_DRAG_ENTER, false)
-        );
+        dispatch(setImageInputDragEnter(false));
     };
 
     ////////////////////////////////////////////////////
@@ -110,18 +71,11 @@ export const LaptopService = (
     const onBrandsDropdownHandler = async () => {
         if (fetchedData.brands?.length) return;
         try {
-            const {
-                data: { data },
-            } = await axios('https://pcfy.redberryinternship.ge/api/brands');
-
-            const modifiedData = data.map((obj) => ({
-                ...obj,
-                fieldName: 'laptop_brand_id',
-            }));
             dispatch(
-                createAction(laptopInfoTypes.SET_FETCHED_DATA, {
-                    ...fetchedData,
-                    brands: modifiedData,
+                fetchLaptopFormDataStart({
+                    dataKey: 'brands',
+                    url: 'https://pcfy.redberryinternship.ge/api/brands',
+                    fieldName: 'laptop_brand_id', //crafting new object in saga for api
                 })
             );
         } catch (err) {
@@ -131,19 +85,11 @@ export const LaptopService = (
     const onCpuDropdownHandler = async () => {
         if (fetchedData.cpus?.length) return;
         try {
-            const {
-                data: { data },
-            } = await axios('https://pcfy.redberryinternship.ge/api/cpus');
-
-            const modifiedData = data.map((obj) => ({
-                ...obj,
-                fieldName: 'laptop_cpu',
-            }));
-
             dispatch(
-                createAction(laptopInfoTypes.SET_FETCHED_DATA, {
-                    ...fetchedData,
-                    cpus: modifiedData,
+                fetchLaptopFormDataStart({
+                    dataKey: 'cpus',
+                    url: 'https://pcfy.redberryinternship.ge/api/cpus',
+                    fieldName: 'laptop_cpu',
                 })
             );
         } catch (err) {
@@ -155,21 +101,20 @@ export const LaptopService = (
         const { fieldName, name, id } = dataObj;
         if (formErrors.includes(fieldName)) {
             dispatch(
-                createAction(
-                    laptopInfoTypes.SET_FORM_ERRORS,
+                setLaptopFormErrors(
                     formErrors.filter((err) => err !== fieldName)
                 )
             );
         }
         dispatch(
-            createAction(laptopInfoTypes.SET_ACTIVE_NAMES, {
+            setLaptopActiveNames({
                 ...activeNames,
                 [fieldName]: name,
             })
         );
         if (fieldName === 'laptop_cpu') {
             dispatch(
-                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                setLaptopFormObject({
                     ...laptopFormObject,
                     [fieldName]: name,
                 })
@@ -177,7 +122,7 @@ export const LaptopService = (
             return;
         } else if (fieldName === 'laptop_brand_id') {
             dispatch(
-                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                setLaptopFormObject({
                     ...laptopFormObject,
                     [fieldName]: id,
                 })
@@ -189,15 +134,12 @@ export const LaptopService = (
     const onRadioSelectHandler = (key, value) => {
         if (formErrors.includes(key)) {
             dispatch(
-                createAction(
-                    laptopInfoTypes.SET_FORM_ERRORS,
-                    formErrors.filter((err) => err !== key)
-                )
+                setLaptopFormErrors(formErrors.filter((err) => err !== key))
             );
         }
         if (value === laptopFormObject[key]) return;
         dispatch(
-            createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+            setLaptopFormObject({
                 ...laptopFormObject,
                 [key]: value,
             })
@@ -211,15 +153,14 @@ export const LaptopService = (
         const value = e.target.value;
         if (formErrors.includes(inputType)) {
             dispatch(
-                createAction(
-                    laptopInfoTypes.SET_FORM_ERRORS,
+                setLaptopFormErrors(
                     formErrors.filter((err) => err !== inputType)
                 )
             );
         }
         if (e.target.type === 'number') {
             dispatch(
-                createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+                setLaptopFormObject({
                     ...laptopFormObject,
                     [inputType]: value ? parseFloat(value) : '',
                 })
@@ -228,7 +169,7 @@ export const LaptopService = (
         }
 
         dispatch(
-            createAction(laptopInfoTypes.SET_LAPTOP_FORM_OBJECT, {
+            setLaptopFormObject({
                 ...laptopFormObject,
                 [inputType]: value,
             })
@@ -271,11 +212,12 @@ export const LaptopService = (
         e.preventDefault();
         const errArray = formValidation();
         if (errArray.length) {
-            dispatch(createAction(laptopInfoTypes.SET_FORM_ERRORS, errArray));
+            dispatch(setLaptopFormErrors(errArray));
             return;
         }
-        setMainDataObject({ ...mainDataObject, ...laptopFormObject });
-        setLoadingState(true);
+        setMainData(laptopFormObject);
+        // setLoadingState(true);
+        sendRequest();
     };
 
     return {
@@ -289,6 +231,6 @@ export const LaptopService = (
         removeImgHandler,
         addPhotoHandler,
         dragHandler,
-        state,
+        laptopInfoState,
     };
 };

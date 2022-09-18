@@ -6,13 +6,24 @@ import {
     NavlinksContainer,
     VectorContainer,
 } from './add-laptop.styles';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import LaptopInfo from './laptop-info/laptop-info.route';
-import axios from 'axios';
 import { Loader, LoaderContainer } from '../../shared/loader/loader.styles';
 import { SuccessModal } from '../../components/SuccessModal/success-modal.component';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    selectFormLoading,
+    selectMainObject,
+    selectSentData,
+} from '../../store/Form/form.selectors';
+import {
+    onPostRequestSuccess,
+    sendPostRequest,
+    setMainObject,
+} from '../../store/Form/form-actions';
 export const AddLaptop = () => {
     const didMountRef = useRef(false);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [mobileState, setMobileState] = useState(false);
     const [mainDataObject, setMainDataObject] = useState('');
@@ -29,10 +40,11 @@ export const AddLaptop = () => {
         setCounter(currentStep);
     }, [currUrl]);
 
-    useEffect(() => {
-        const postRequest = async () => {
-            try {
-                const fd = new FormData();
+    // useEffect(() => {
+    //     if (loadingState) {
+    //         dispatch(sendPostRequest());
+    //     }
+    // }, [mainDataObject, loadingState, dispatch]);
 
                 Object.keys(mainDataObject).forEach((key) => {
                     fd.append(key, mainDataObject[key]);

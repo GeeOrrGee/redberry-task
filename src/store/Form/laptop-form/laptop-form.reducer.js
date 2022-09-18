@@ -1,5 +1,4 @@
-import { laptopInfoTypes } from './laptop-info.types';
-
+import { laptopInfoTypes } from './laptop-form.types';
 export const defaultLaptopObject = {
     laptop_name: '',
     laptop_image: null,
@@ -19,7 +18,7 @@ export const defaultState = {
     imageInputDragEnter: false,
     formErrors: [],
     fetchedData: {},
-    currData: {},
+    // currData: {},
     activeNames: {
         laptop_cpu: 'CPU',
         laptop_brand_id: 'ლეპტოპის ბრენდი',
@@ -28,6 +27,7 @@ export const defaultState = {
 
 export const laptopInfoReducer = (state = defaultState, action = {}) => {
     const { type, payload } = action;
+
     switch (type) {
         case laptopInfoTypes.SET_FORM_ERRORS:
             return { ...state, formErrors: payload };
@@ -36,16 +36,19 @@ export const laptopInfoReducer = (state = defaultState, action = {}) => {
 
         case laptopInfoTypes.SET_LAPTOP_FORM_OBJECT:
             return { ...state, laptopFormObject: payload };
-        case laptopInfoTypes.SET_FETCHED_DATA:
-            return { ...state, fetchedData: payload, currData: payload };
-        case laptopInfoTypes.SET_CURR_DATA:
-            return { ...state, currData: payload };
 
+        case laptopInfoTypes.FETCH_LAPTOP_DATA_SUCCESS:
+            return {
+                ...state,
+                fetchedData: { ...state.fetchedData, ...payload },
+            };
+        // case laptopInfoTypes.SET_FETCHED_DATA:
+        //     return { ...state, fetchedData: payload, currData: payload };
+        // case laptopInfoTypes.SET_CURR_DATA:
+        //     return { ...state, currData: payload };
         case laptopInfoTypes.SET_ACTIVE_NAMES:
             return { ...state, activeNames: payload };
 
-        case laptopInfoTypes.REHYDRATE_STATE:
-            return payload;
         default:
             return state;
     }
