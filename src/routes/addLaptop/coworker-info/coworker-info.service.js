@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserInfo } from '../../../store/Form/user-form/user-form.selectors';
 import {
@@ -13,7 +12,6 @@ import {
     fetchPositionsStart,
     fetchTeamsStart,
 } from '../../../store/Form/user-form/user-form.actions';
-import { act } from 'react-dom/test-utils';
 
 export const CoworkerInfoService = (setMainData) => {
     const dispatch = useDispatch();

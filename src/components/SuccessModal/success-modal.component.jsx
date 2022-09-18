@@ -6,11 +6,14 @@ import {
     SuccessModalContainer,
 } from './success-modal.styles';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const SuccessModal = () => {
     useEffect(() => {
         localStorage.clear();
     }, []);
+
+    const clearLocalStorage = () => localStorage.clear();
     return (
         <>
             <Backdrop />{' '}

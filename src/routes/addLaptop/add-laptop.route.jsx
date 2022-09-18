@@ -28,7 +28,6 @@ export const AddLaptop = () => {
 
     //selectors
     const sentData = useSelector(selectSentData);
-    // const mainObject = useSelector(selectMainObject);
     const loadingState = useSelector(selectFormLoading);
     //dispatch callbacks
     const sendRequest = () => dispatch(sendPostRequest());
@@ -63,10 +62,6 @@ export const AddLaptop = () => {
 
         return window.removeEventListener('resize', () => renderRedberryLogo());
     }, [mobileState]);
-
-    //         setMainDataObject(persistedMainDataObject);
-    //     }
-    // }, [navigate]);
 
     const prevRoute = () => navigate(-1);
     return (

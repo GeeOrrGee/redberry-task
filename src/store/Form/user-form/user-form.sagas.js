@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest, all, call, select } from 'redux-saga/effects';
 import {
-    fetchPositionsStart,
-    fetchTeamsStart,
     onUserFetchFail,
     onUserFetchSuccess,
     setCurrentPositionsData,
