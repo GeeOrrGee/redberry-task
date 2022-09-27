@@ -17,17 +17,17 @@ export const formGlobalReducer = (state = defaultState, action = {}) => {
         case formTypes.SEND_POST_REQUEST:
             return { ...state, loadingState: true };
         case formTypes.POST_REQUEST_SUCCESS:
-            return { ...state, loadingState: false, sentData: true };
+            return { mainObject: {}, loadingState: false, sentData: true };
+
         case formTypes.POST_REQUEST_FAIL:
             return {
-                ...state,
+                mainObject: {},
                 loadingState: false,
                 sentData: false,
                 error: payload,
             };
-        case formTypes.SET_DEFAULT:
-            return { ...defaultState };
-
+        case formTypes.SET_SUCCES_MODAL:
+            return { ...state, sentData: false };
         // case formTypes.SET_LAPTOP_INFO:
         //     return { ...state, user: laptop(state.laptop, payload) };
         default:

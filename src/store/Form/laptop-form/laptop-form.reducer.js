@@ -1,3 +1,4 @@
+import { formTypes } from '../form-global/globalForm.types';
 import { laptopInfoTypes } from './laptop-form.types';
 export const defaultLaptopObject = {
     laptop_name: '',
@@ -48,6 +49,8 @@ export const laptopInfoReducer = (state = defaultState, action = {}) => {
         //     return { ...state, currData: payload };
         case laptopInfoTypes.SET_ACTIVE_NAMES:
             return { ...state, activeNames: payload };
+        case formTypes.SEND_POST_REQUEST:
+            return defaultState;
 
         default:
             return state;

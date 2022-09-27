@@ -33,7 +33,6 @@ const laptopCondition = [
 
 export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
     const imageInputRef = useRef();
-    const didMountRef = useRef(false);
     const {
         onSubmitHandler,
         onChangeHandler,
@@ -69,7 +68,7 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
                     accept='image/*'
                     ref={imageInputRef}
                 />
-                {!laptopFormObject.laptop_image ? (
+                {!laptopFormObject.laptop_image?.size ? (
                     <DropzoneTextContainer>
                         {imageInputDragEnter ? (
                             <p>Drop Here !</p>
@@ -103,7 +102,7 @@ export const LaptopInfo = ({ setMainData, sendRequest, mobileState }) => {
                 ) : (
                     <img
                         src={
-                            laptopFormObject.laptop_image !== null
+                            laptopFormObject.laptop_image?.size
                                 ? URL.createObjectURL(
                                       laptopFormObject.laptop_image
                                   )

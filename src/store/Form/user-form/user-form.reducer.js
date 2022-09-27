@@ -1,3 +1,4 @@
+import { formTypes } from '../form-global/globalForm.types';
 import coworkerTypes from './user-form.types';
 
 const defaultUserObject = {
@@ -58,6 +59,8 @@ export const coworkerReducer = (state = defaultUserState, action) => {
                 ...state,
                 activeNames: { ...state.activeNames, ...payload },
             };
+        case formTypes.SEND_POST_REQUEST:
+            return defaultUserState;
 
         default:
             return state;

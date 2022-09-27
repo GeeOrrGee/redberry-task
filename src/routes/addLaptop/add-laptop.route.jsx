@@ -13,6 +13,7 @@ import { SuccessModal } from '../../components/SuccessModal/success-modal.compon
 import { useDispatch, useSelector } from 'react-redux';
 import {
     selectFormLoading,
+    selectMainObject,
     selectSentData,
 } from '../../store/Form/form-global/globalForm.selectors';
 import {
@@ -29,6 +30,7 @@ export const AddLaptop = () => {
     //selectors
     const sentData = useSelector(selectSentData);
     const loadingState = useSelector(selectFormLoading);
+    const mainObject = useSelector(selectMainObject);
     //dispatch callbacks
     const sendRequest = () => dispatch(sendPostRequest());
     const setMainData = (data) => dispatch(setMainObject(data));
@@ -62,6 +64,16 @@ export const AddLaptop = () => {
 
         return window.removeEventListener('resize', () => renderRedberryLogo());
     }, [mobileState]);
+
+    useEffect(() => {
+        const currUrl =
+            window.location.pathname.substring(
+                window.location.pathname.lastIndexOf('/') + 1
+            ) === 'laptop-specs';
+        if (!mainObject.email && currUrl) {
+            navigate('/add-laptop/coworker-info');
+        }
+    }, [mainObject, navigate]);
 
     const prevRoute = () => navigate(-1);
     return (

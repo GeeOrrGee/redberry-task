@@ -9,6 +9,7 @@ import { FormInput } from '../../../components/InputField/input-field.component'
 import { CoworkerInfoService } from './coworker-info.service.js';
 import { useSelector } from 'react-redux';
 import { selectUserInfo } from '../../../store/Form/user-form/user-form.selectors.js';
+import { useEffect } from 'react';
 export const CoworkerInfo = ({ setMainData }) => {
     const {
         handleDropdownSelect,
